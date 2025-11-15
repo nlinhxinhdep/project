@@ -3,7 +3,6 @@ package entity;
 import main.KeyHandler;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
-
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -121,9 +120,8 @@ public class Player extends Entity {
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             contactMonster(monsterIndex);
             
-            //CHECK EVENT
+            //CHECK EVENT teleport, trap, healing pool
             gp.eHandler.checkEvent();
-            gp.keyH.enterPressed = false;
             
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
             if (collisionOn == false && keyH.enterPressed == false) {
@@ -134,13 +132,13 @@ public class Player extends Entity {
                     case "right": worldX += speed; break;
                 }
             }
-
             if(keyH.enterPressed == true && attackCanceled == false) {
+                gp.playSE(7);
                 attacking = true;
                 spriteCounter = 0;
             }
-            attackCanceled = false;
 
+            attackCanceled = false;
             gp.keyH.enterPressed = false;
             // ANIMATION
             spriteCounter++;
@@ -217,15 +215,19 @@ public class Player extends Entity {
                 attackCanceled = true;  	
             	gp.gameState = gp.dialogueState;          
                 gp.npc[i].speak();           	
-    		}
+    		}      
     	}  
     }
     
     public void contactMonster(int i) {
     	if(i != 999) {
     		if(invincible == false){
+                int damage = gp.monster[i].attack - defense;
+                if (damage < 0) {
+                    damage = 0; // Prevent negative damage
+                }
     			gp.playSE(6);
-    			life -= 1;
+    			life -= damage;
     			invincible = true;
     		}
     		
@@ -235,8 +237,14 @@ public class Player extends Entity {
     public void damageMonster(int i) {
     	if (i != 999) {
     	    if (gp.monster[i].invincible == false) {
+
     	    	gp.playSE(5);
-    	        gp.monster[i].life -= 1;
+
+                int damage = attack - gp.monster[i].defense;
+                if (damage < 0) {
+                    damage = 0; // Prevent negative damage
+                }
+    	        gp.monster[i].life -= damage;
     	        gp.monster[i].invincible = true;
     	        gp.monster[i].damageReaction();
     	        if (gp.monster[i].life <= 0) {

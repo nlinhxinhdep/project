@@ -137,38 +137,38 @@ public class GamePanel extends JPanel implements Runnable {
         	ui.draw(g2);
         }
         else {
-        	 tileM.draw(g2); // Vẽ bản đồ (tile map)
-        	 // add entity to the list
-        	 entityList.add(player);
-        	 for(int i = 0; i < npc.length; i++) {
-        		 if(npc[i] != null) {
-        			 entityList.add(npc[i]);
-        		 }
-        	 }
-        	 for(int i = 0; i < obj.length; i++) {
-        		 if(obj[i] != null) {
-        			 entityList.add(obj[i]);
-        		 }
-        	 }
-        	 for(int i = 0; i < monster.length; i++) {
-        		 if(monster[i] != null) {
-        			 entityList.add(monster[i]);
-        		 }
-        	 }
-        	 // sort
-        	Collections.sort(entityList, new Comparator<Entity>(){
-        		@Override
-        		public int compare(Entity e1, Entity e2) {
-        			int result = Integer.compare(e1.worldY, e2.worldY);
-        			return result;
-        		}
-        	});
-        	 for(int i = 0; i < entityList.size(); i++) {
-        		 entityList.get(i).draw(g2);
-        	 }
-        	 // empty
-        		 entityList.clear();
-             ui.draw(g2);
+            tileM.draw(g2); // Vẽ bản đồ (tile map)
+            // add entity to the list
+            entityList.add(player);
+            for(int i = 0; i < npc.length; i++) {
+                if(npc[i] != null) {
+                    entityList.add(npc[i]);
+                }
+            }
+            for(int i = 0; i < obj.length; i++) {
+                if(obj[i] != null) {
+                    entityList.add(obj[i]);
+                }
+            }
+            for(int i = 0; i < monster.length; i++) {
+                if(monster[i] != null) {
+                    entityList.add(monster[i]);
+                }
+            }
+            // sort
+            Collections.sort(entityList, new Comparator<Entity>(){
+            @Override
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare(e1.worldY, e2.worldY);
+                    return result;
+                }
+            });
+            for(int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2);
+            }
+            // empty
+                entityList.clear();
+            ui.draw(g2);
              	
         }
         g2.dispose();          

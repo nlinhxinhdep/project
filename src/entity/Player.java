@@ -1,12 +1,12 @@
 package entity;
 
 import main.KeyHandler;
-import main.UtilityTool;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
+
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import main.GamePanel;
 import java.awt.image.BufferedImage;
 
@@ -16,6 +16,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public int hasKey = 0;
+    public boolean attackCanceled = false;
     
     public Player(GamePanel gp, KeyHandler keyH){	
     	super(gp);
@@ -45,9 +46,27 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+        level = 1;
+        strength = 1; // the more strength, the more attack power
+        dexterity = 1; // the more dexterity, the more defense power
         maxLife = 20;
         life = maxLife;
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack(); // calculate attack value
+        defense = getDefense(); // calculate defense value  
     }
+    public int getAttack() {
+    	return attack = strength *currentWeapon.attackValue;
+    }
+
+    public int getDefense() {
+    	return defense = dexterity * currentShield.defenseValue;
+    }
+
     public void getPlayerImage() {
         up1 = setup("/player/boy_up_1", gp.tileSize, gp.tileSize);
         up2 = setup("/player/boy_up_2", gp.tileSize, gp.tileSize);
@@ -115,6 +134,13 @@ public class Player extends Entity {
                     case "right": worldX += speed; break;
                 }
             }
+
+            if(keyH.enterPressed == true && attackCanceled == false) {
+                attacking = true;
+                spriteCounter = 0;
+            }
+            attackCanceled = false;
+
             gp.keyH.enterPressed = false;
             // ANIMATION
             spriteCounter++;
@@ -179,31 +205,25 @@ public class Player extends Entity {
         
     }
 
-    
     public void pickUpObject(int i) {
         if (i != 999) {
 
         }
     }
-    
+
     public void interactNPC(int i) {
     	if(gp.keyH.enterPressed == true){
-    		if (i != 999) {        	
+    		if (i != 999) {      
+                attackCanceled = true;  	
             	gp.gameState = gp.dialogueState;          
-                   gp.npc[i].speak();           	
+                gp.npc[i].speak();           	
     		}
-    		// khong nch npc then attacking
-            else{
-            		gp.playSE(7);
-            		attacking = true;	
-            }
     	}  
     }
     
     public void contactMonster(int i) {
     	if(i != 999) {
-    		if(invincible == false)
-    		{
+    		if(invincible == false){
     			gp.playSE(6);
     			life -= 1;
     			invincible = true;
@@ -227,8 +247,6 @@ public class Player extends Entity {
         
     }
     
-    
-
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -290,9 +308,5 @@ public class Player extends Entity {
         }
         g2.drawImage(image, tempScreenX, tempScreenY, drawWidth, drawHeight, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
     }
-
-
-
 }

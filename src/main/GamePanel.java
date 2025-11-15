@@ -1,11 +1,9 @@
 package main;
 
 import javax.swing.JPanel;
-
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -91,12 +89,10 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();             // Lấy thời điểm hiện tại (tính bằng nano giây)
         double drawInterval = 1000000000 / FPS;        // Thời gian giữa mỗi khung hình (1 giây / số khung hình/giây)
         double delta = 0;                              // Biến đếm để kiểm soát khi nào cần cập nhật khung hình
-
         while (gameThread != null) {                   // Vòng lặp chính của game (game loop), chạy liên tục khi gameThread tồn tại
             long currentTime = System.nanoTime();      // Lấy thời điểm hiện tại (nano giây)
             delta += (currentTime - lastTime) / drawInterval; 	// Tính xem đã trôi qua bao nhiêu phần của 1 khung hình
             lastTime = currentTime;                    			// Cập nhật lại mốc thời gian để tính lần sau
-
             if (delta >= 1) {                       // Khi đủ thời gian cho 1 khung hình (delta >= 1)
                 update();                           // Cập nhật trạng thái game (vị trí nhân vật, va chạm, logic, v.v.)
                 repaint();                          // Vẽ lại màn hình game (gọi paintComponent)
@@ -108,8 +104,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update(){
     	if(gameState == playState) {
-    		// player
-    		player.update();
+    		player.update();// Player
     		// npc
     		for(int i = 0; i < npc.length; i++) {
     			if(npc[i] != null) {
@@ -126,9 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
     					monster[i] = null;	
     				}
     			}
-    		}
-    		
-    		
+    		}	
     	}
     	if(gameState == pauseState) {
     		//nothing
@@ -138,15 +131,13 @@ public class GamePanel extends JPanel implements Runnable {
 // @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);                // Gọi hàm paintComponent của lớp cha để xóa nền cũ
-        Graphics2D g2 = (Graphics2D)g;          // Ép kiểu Graphics sang Graphics2D để dùng các hàm vẽ nâng cao
-        
+        Graphics2D g2 = (Graphics2D)g;          // Ép kiểu Graphics sang Graphics2D để dùng các hàm vẽ nâng cao 
         // TITLE SCREEN
         if(gameState == titleState) {
         	ui.draw(g2);
         }
         else {
         	 tileM.draw(g2); // Vẽ bản đồ (tile map)
-        	 
         	 // add entity to the list
         	 entityList.add(player);
         	 for(int i = 0; i < npc.length; i++) {
@@ -164,24 +155,19 @@ public class GamePanel extends JPanel implements Runnable {
         			 entityList.add(monster[i]);
         		 }
         	 }
-        	 
         	 // sort
-        	 Collections.sort(entityList, new Comparator<Entity>(){
-        		  @Override
-        		  public int compare(Entity e1, Entity e2) {
-        			  int result = Integer.compare(e1.worldY, e2.worldY);
-        			  return result;
-        		  }
+        	Collections.sort(entityList, new Comparator<Entity>(){
+        		@Override
+        		public int compare(Entity e1, Entity e2) {
+        			int result = Integer.compare(e1.worldY, e2.worldY);
+        			return result;
+        		}
         	});
-        	 
         	 for(int i = 0; i < entityList.size(); i++) {
         		 entityList.get(i).draw(g2);
         	 }
-        	 
         	 // empty
         		 entityList.clear();
-        	 
-             
              ui.draw(g2);
              	
         }
@@ -193,11 +179,9 @@ public class GamePanel extends JPanel implements Runnable {
     	music.play();
     	music.loop();
     }
-    
     public void stopMusic() {
     	music.stop();
     }
-    
     public void playSE(int i) {
     	se.setFile(i);
     	se.play();

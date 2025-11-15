@@ -5,7 +5,6 @@ import entity.Entity;
 public class CollisionChecker {
 
     GamePanel gp;
-
     public CollisionChecker(GamePanel gp) {
         this.gp = gp;
     }
@@ -65,7 +64,6 @@ public class CollisionChecker {
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
         for (int i = 0; i < gp.obj.length; i++) {
-
             if (gp.obj[i] != null) {
                 // GET ENTITY'S SOLID AREA POSITION
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
@@ -99,13 +97,9 @@ public class CollisionChecker {
 
         return index;
     }
-    
-    //npc or monster
-    
-    
+    // check entity collision
     public int checkEntity(Entity entity, Entity[] target) {
         int index = 999;
-
         for (int i = 0; i < target.length; i++) {
             if (target[i] != null) {
                 // Lấy vị trí thực tế của solidArea entity
@@ -140,7 +134,6 @@ public class CollisionChecker {
     }
 
     public boolean checkPlayer(Entity entity) {
-    	
     	boolean contactPlayer = false;
         // Lấy vị trí thực tế của solidArea entity
         entity.solidArea.x = entity.worldX + entity.solidArea.x;
@@ -158,8 +151,6 @@ public class CollisionChecker {
         }
         if (entity.solidArea.intersects(gp.player.solidArea)) {
             entity.collisionOn = true;
-            // Nếu NPC có thể gây sát thương hoặc tương tác
-//            gp.player.damage = true;
             contactPlayer = true;
         }
 

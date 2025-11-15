@@ -1,14 +1,9 @@
 package entity;
-
 import java.util.Random;
-
 import main.GamePanel;
-
 public class NPC_OldMan extends Entity{
-
     public NPC_OldMan(GamePanel gp) {
         super(gp);
-
         direction = "down";
         speed = 1;
         
@@ -31,7 +26,6 @@ public class NPC_OldMan extends Entity{
         dialogues[1] = "Be careful of monsters\nin the forest!";
         dialogues[2] = "Come back later,\nI may have more news.";
     }
-
     
     public void setAction() {
     	
@@ -39,7 +33,6 @@ public class NPC_OldMan extends Entity{
     	if(actionLockCounter == 120) {
     		Random random = new Random();
             int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
-
             if (i % 4 == 0) {
                 direction = "up";
             }

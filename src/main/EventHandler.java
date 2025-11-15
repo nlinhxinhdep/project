@@ -1,12 +1,10 @@
 package main;
 
 import entity.Entity;
-
 public class EventHandler {
 
     GamePanel gp;
     EventRect[][] eventRect;
-    
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
 //    Entity eventMaster; // thêm để quản lý người kích hoạt (player)
@@ -34,7 +32,6 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-
         // khoảng cách giữa lần kích hoạt trước và hiện tại
         int xDistance = Math.abs(gp.player.worldX - previousEventX);
         int yDistance = Math.abs(gp.player.worldY - previousEventY);
@@ -50,7 +47,7 @@ public class EventHandler {
             // HEALING POOL
             if (hit(23, 12, "up") == true) healingPool(23, 12, gp.dialogueState);
             // TELEPORT
-            if (hit(10, 39, "any") == true) teleport(10, 39, gp.dialogueState);
+            if (hit(20, 20, "any") == true) teleport(10, 39, gp.dialogueState);
         }
     }
 

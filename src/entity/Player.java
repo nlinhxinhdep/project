@@ -17,8 +17,6 @@ public class Player extends Entity {
     public final int screenY;
     public int hasKey = 0;
     
-    
-    
     public Player(GamePanel gp, KeyHandler keyH){	
     	super(gp);
         this.keyH = keyH;
@@ -91,13 +89,16 @@ public class Player extends Entity {
             // CHECK TILE COLLISION
             collisionOn = false;
             gp.cChecker.checkTile(this);
+
             //CHECK OBJ COLLISION
             int objIndex = gp.cChecker.checkObject(this, true);
-            pickUpObject(objIndex);            
-            // Check NPC COLLISION
+            pickUpObject(objIndex); 
+
+            // CHECK NPC COLLISION
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
-            interactNPC(npcIndex);            
-            //check monster collision           
+            interactNPC(npcIndex);  
+
+            //CHECK MONSTER COLLISION
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             contactMonster(monsterIndex);
             
@@ -138,14 +139,11 @@ public class Player extends Entity {
     }
     public void attacking() {
     	spriteCounter++;
-
     	if(spriteCounter <= 5) {
     	    spriteNum = 1;
     	}
-
     	if(spriteCounter > 5 && spriteCounter <= 25) {
     	    spriteNum = 2;
-    	    
     	    int currentWorldX = worldX;
     	    int currentWorldY = worldY;
     	    int solidAreaWidth = solidArea.width;
@@ -173,7 +171,6 @@ public class Player extends Entity {
     	    solidArea.width = solidAreaWidth;
     	    solidArea.height = solidAreaHeight;
     	}
-
     	if(spriteCounter > 25) {
     	    spriteNum = 1;
     	    spriteCounter = 0;

@@ -35,7 +35,6 @@ public class Entity {
 	public boolean dying = false;
 	public boolean hpBarOn = false;
 	
-
 	// COUNTER
 	public int spriteCounter = 0;
 	public int actionLockCounter = 0;
@@ -67,7 +66,6 @@ public class Entity {
         if (dialogueIndex >= dialogues.length || dialogues[dialogueIndex] == null) {
             dialogueIndex = 0;
         }
-        
         switch (gp.player.direction) {
         case "up":direction = "down"; // NPC nhìn xuống player
             break;
@@ -78,7 +76,6 @@ public class Entity {
         case "right":direction = "left";  // NPC nhìn sang trái
             break;
         }
-    	
     }
     public void update() {
         setAction();
@@ -96,6 +93,7 @@ public class Entity {
         		gp.player.invincible = true;
         	}
         }
+        // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (collisionOn == false) { 
         	switch (direction) {
                 case "up": worldY -= speed; break;
@@ -114,8 +112,7 @@ public class Entity {
             }
             spriteCounter = 0;
         }
-        
-        
+
         if (invincible == true) {
             invincibleCounter++;
             if (invincibleCounter > 60) {
@@ -167,7 +164,6 @@ public class Entity {
         	    if(hpBarCounter > 600) {
         	    	hpBarCounter = 0;
         	    	hpBarOn = false;
-        	    	
         	    }
         	}
         	if (invincible == true) {
@@ -178,8 +174,6 @@ public class Entity {
         	if(dying == true) {
         		dyingAnimation(g2);
         	}
-        	
-        	
 	        g2.drawImage(image, screenX, screenY, null);
 	        changeAlpha(g2, 1f);
         }
@@ -187,9 +181,7 @@ public class Entity {
     
     public void dyingAnimation(Graphics2D g2) {
     	dyingCounter++;
-
     	int i = 10;
-
     	if (dyingCounter <= i) {changeAlpha(g2, 0f);}
     	if (dyingCounter > i && dyingCounter <= i * 2) {changeAlpha(g2, 1f);}
     	if (dyingCounter > i * 2 && dyingCounter <= i * 3) {changeAlpha(g2, 0f);}
@@ -198,21 +190,18 @@ public class Entity {
     	if (dyingCounter > i * 5 && dyingCounter <= i * 6) {changeAlpha(g2, 1f);}
     	if (dyingCounter > i * 6 && dyingCounter <= i * 7) {changeAlpha(g2, 0f);}
     	if (dyingCounter > i * 7 && dyingCounter <= i * 8) {changeAlpha(g2, 1f);}
-
     	if (dyingCounter > i * 8) {
     	    dying = false;
     	    alive = false;
     	}
     }
-    public void changeAlpha(Graphics2D g2, float alphaValue)
-    {
+    public void changeAlpha(Graphics2D g2, float alphaValue){
     	g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
     }
+
     public BufferedImage setup(String imagePath, int width, int height) {
-        
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
-        
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             image = uTool.scaleImage(image, width, height);   

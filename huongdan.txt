@@ -4,6 +4,10 @@ java -cp bin main.Main
 
 Tóm Tắt Quy Trình Git Tối Ưu
 
+làm việc
+
+0. git pull origin main // cập nhật code của người trước
+
 1. Code: Làm việc, tạo ra các thay đổi mới.
 
 2. git add .
@@ -18,5 +22,9 @@ Ví dụ: git commit -m "vid 46-50"
 
 5. git push origin main
 : Đẩy code đã hoàn thành lên kho lưu trữ từ xa (GitHub).
+
+// thêm class ở mục java Projects
+
+
 
 

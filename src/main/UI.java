@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import object.OBJ_Heart;
 import object.OBJ_Key;
@@ -17,8 +19,10 @@ public class UI {
     Graphics2D g2;
     BufferedImage heart_full, heart_half, heart_blank;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời
-    public String message = "";       // nội dung thông báo
-    int messageCounter = 0;  // đếm thời gian hiển thị thông báo
+    // public String message = "";       // nội dung thông báo
+    // int messageCounter = 0;  // đếm thời gian hiển thị thông báo
+    ArrayList<String> message = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
     public boolean gameFinished = false;
     public String currentDialogue = "";
     public int commandNum = 0;
@@ -37,9 +41,11 @@ public class UI {
         heart_blank = heart.image3;
     }
 
-    public void showMessage(String text) {
-        message = text;      // đặt nội dung thông báo
-        messageOn = true;    // bật hiển thị
+    public void addMessage(String text) {
+        // message = text;      // đặt nội dung thông báo
+        // messageOn = true;    // bật hiển thị
+        message.add(text);
+        messageCounter.add(0);
     }
 
     public void draw(Graphics2D g2) {
@@ -57,6 +63,7 @@ public class UI {
             // Không cần vẽ gì thêm ở đây (UI chỉ vẽ HUD, hoặc thông tin player)
             // Ví dụ: drawPlayerLife(); hoặc drawMessage();
         	drawPlayerLife();
+            drawMessage();
         }
 
         // PAUSE STATE
@@ -75,6 +82,8 @@ public class UI {
         	drawCharacterScreen();
         }
     }
+
+
     
     public void drawPlayerLife() {
 
@@ -193,9 +202,32 @@ public class UI {
 
     }
 
+    public void drawMessage(){
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize * 4;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        for(int i = 0; i < message.size(); i++) {
+            if(message.get(i) != null) {
+                g2.setColor(Color.black);
+                g2.drawString(message.get(i), messageX +2 , messageY + 2);
+                g2.setColor(Color.white);
+                g2.drawString(message.get(i), messageX, messageY);
+                
+                int counter = messageCounter.get(i) + 1;
+                messageCounter.set(i, counter);
+                messageY += 50;
+
+                if(messageCounter.get(i) > 180){
+                    message.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+
+        }
+    }
+
     
     public void drawTitleScreen() {
-
         // Màu nền
         g2.setColor(new Color(70, 120, 80));
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);

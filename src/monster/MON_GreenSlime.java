@@ -12,7 +12,7 @@ public class MON_GreenSlime extends Entity{
 		super(gp);
 		// TODO Auto-generated constructor stub
 		this.gp = gp;
-		type = 2;
+		type = type_monster;
 		name = "Green Slime";
 		speed = 2;
 		maxLife = 6;

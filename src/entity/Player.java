@@ -1,7 +1,9 @@
 package entity;
 
 import main.KeyHandler;
+import object.OBJ_Fireball;
 import object.OBJ_Key;
+import object.OBJ_Rock;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 import java.awt.AlphaComposite;
@@ -16,6 +18,7 @@ public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX;
     public final int screenY;
+    public int standCounter = 0;
     public int hasKey = 0;
     public boolean attackCanceled = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
@@ -50,9 +53,13 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+
+        maxMana = 4;
+        mana = maxMana;
+        ammo = 10;
         level = 1;
-        strength = 1; // the more strength, the more attack power
-        dexterity = 1; // the more dexterity, the more defense power
+        strength = 1; 
+        dexterity = 1; 
         maxLife = 6;
         life = maxLife;
         exp = 0;
@@ -60,6 +67,8 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        projectile = new OBJ_Fireball(gp);  
+        // projectile = new OBJ_Rock(gp);      
         attack = getAttack(); // calculate attack value
         defense = getDefense(); // calculate defense value  
     }
@@ -177,7 +186,27 @@ public class Player extends Entity {
                 }
                 spriteCounter = 0;
             }
+            else{
+                standCounter++;
+                if(standCounter == 20){
+                    standCounter = 0;
+                    spriteNum = 1;
+                }
+            }
         }
+
+        if(gp.keyH.shotKeyPressed == true && projectile.alive == false 
+        && shotAvailableCounter == 30 && projectile.haveResource(this) == true){
+            projectile.set(worldX, worldY, direction, true, this);
+
+            projectile.subtractResource(this);           
+            gp.projectileList.add(projectile);
+
+            shotAvailableCounter = 0;
+            gp.keyH.shotKeyPressed = false;
+            gp.playSE(10);
+        }
+
         // INVINCIBILITY TIMER
         if(invincible == true) {
         	invincibleCounter++;
@@ -185,6 +214,9 @@ public class Player extends Entity {
         		invincible = false;
         		invincibleCounter = 0;	
         	}        	
+        }
+        if(shotAvailableCounter < 30){
+            shotAvailableCounter++;
         }
     }
     public void attacking() {
@@ -213,7 +245,7 @@ public class Player extends Entity {
 
     	    // Check monster collision with the updated worldX, worldY and solidArea
     	    int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-    	    damageMonster(monsterIndex);
+    	    damageMonster(monsterIndex, attack);
 
     	    // After checking collision, resotre the original data
     	    worldX = currentWorldX;
@@ -258,7 +290,7 @@ public class Player extends Entity {
     
     public void contactMonster(int i) {
     	if(i != 999) {
-    		if(invincible == false){
+    		if(invincible == false && gp.monster[i].dying == false){
                 int damage = gp.monster[i].attack - defense;
                 if (damage < 0) {
                     damage = 0; // Prevent negative damage
@@ -271,7 +303,7 @@ public class Player extends Entity {
     	}
     }
     
-    public void damageMonster(int i) {
+    public void damageMonster(int i, int attack) {
     	if (i != 999) {
     	    if (gp.monster[i].invincible == false) {
 
@@ -294,7 +326,6 @@ public class Player extends Entity {
     	        }
     	    }
     	}
-
     }
 
     public void checkLevelup(){

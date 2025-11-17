@@ -38,6 +38,7 @@ public class Entity {
 	public int spriteCounter = 0;
 	public int actionLockCounter = 0;
 	public int invincibleCounter = 0;
+    public int shotAvailableCounter = 0;
 	int dyingCounter = 0;
 	int hpBarCounter = 0;
 
@@ -46,6 +47,9 @@ public class Entity {
 	public int speed;
 	public int maxLife;
 	public int life;
+    public int maxMana;
+    public int mana;
+    public int ammo;
     public int level;
     public int strength;
     public int dexterity;
@@ -56,11 +60,14 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectile projectile;
 
     //Item Attributes
     public int attackValue;
     public int defenseValue;
     public String description = "";
+    public int useCost;
+    
 
     // TYPE
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -103,6 +110,7 @@ public class Entity {
     }
 
     public void use(Entity entity){}
+
     public void update() {
         setAction();
         collisionOn = false;
@@ -113,16 +121,8 @@ public class Entity {
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
         
         if(this.type == type_monster && contactPlayer == true) {
-        	if(gp.player.invincible == false) {
-        		gp.playSE(6);
-
-                int damage = attack - gp.player.defense;
-                if(damage < 0) {
-                    damage = 0; // Prevent negative damage
-                }
-        		gp.player.life -= damage;
-        		gp.player.invincible = true;
-        	}
+            damagePlayer(attack);
+        	
         }
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (collisionOn == false) { 
@@ -146,10 +146,26 @@ public class Entity {
 
         if (invincible == true) {
             invincibleCounter++;
-            if (invincibleCounter > 60) {
+            if (invincibleCounter > 40) {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(shotAvailableCounter < 30){
+            shotAvailableCounter++;
+        }
+    }
+
+    public void damagePlayer(int attack){
+        if(gp.player.invincible == false) {
+            gp.playSE(6);
+
+            int damage = attack - gp.player.defense;
+            if(damage < 0) {
+                damage = 0; // Prevent negative damage
+            }
+            gp.player.life -= damage;
+            gp.player.invincible = true;
         }
     }
     
@@ -222,7 +238,6 @@ public class Entity {
     	if (dyingCounter > i * 6 && dyingCounter <= i * 7) {changeAlpha(g2, 0f);}
     	if (dyingCounter > i * 7 && dyingCounter <= i * 8) {changeAlpha(g2, 1f);}
     	if (dyingCounter > i * 8) {
-    	    dying = false;
     	    alive = false;
     	}
     }

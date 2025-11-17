@@ -9,7 +9,7 @@ public class OBJ_Chest extends Entity {
         super(gp);
 
         name = "Chest";
-        down1 = setup("/object/chest", gp.tileSize, gp.tileSize);
+        down1 = setup("/objects/chest", gp.tileSize, gp.tileSize);
         collision = true; // Rương có va chạm, ngăn người chơi đi xuyên qua
     }
 }

@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 import object.OBJ_Heart;
 import object.OBJ_Key;
+import object.OBJ_ManaCrystal;
 import entity.Entity;
 
 public class UI {
@@ -17,7 +17,7 @@ public class UI {
     GamePanel gp;        // tham chiếu đến GamePanel để vẽ thông tin trò chơi
     Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
     Graphics2D g2;
-    BufferedImage heart_full, heart_half, heart_blank;
+    BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời
     // public String message = "";       // nội dung thông báo
     // int messageCounter = 0;  // đếm thời gian hiển thị thông báo
@@ -41,6 +41,10 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;
+
+        Entity cystal = new OBJ_ManaCrystal(gp);
+        crystal_full = cystal.image;
+        crystal_blank = cystal.image2;
     }
 
     public void addMessage(String text) {
@@ -121,6 +125,28 @@ public class UI {
             }
             x += gp.tileSize;
         }
+
+
+        // DRAW MAX MANA
+        x = (gp.tileSize/2)-5;
+        y = (int) (gp.tileSize*1.5);
+        i = 0;
+        while (i < gp.player.maxMana) {
+            g2.drawImage(crystal_blank, x, y, null);
+            i++;
+            x += 35;
+        }
+
+        // DRAW MANA
+        x = (gp.tileSize/2)-5;
+        y = (int) (gp.tileSize*1.5);
+        i = 0;
+        while (i < gp.player.mana) {
+            g2.drawImage(crystal_full, x, y, null);
+            i++;
+            x += 35;
+        }
+
     }
 
     public void drawCharacterScreen() {
@@ -143,6 +169,8 @@ public class UI {
         textY += lineHeight;
         g2.drawString("Life" , textX, textY);
         textY += lineHeight;
+        g2.drawString("Mana" , textX, textY);
+        textY += lineHeight;
         g2.drawString("Strength", textX, textY);
         textY += lineHeight;
         g2.drawString("Dexterity" , textX, textY);
@@ -154,9 +182,9 @@ public class UI {
         g2.drawString("Exp", textX, textY);
         textY += lineHeight;
         g2.drawString("Coin", textX, textY);
-        textY += lineHeight + 15;
+        textY += lineHeight + 5;
         g2.drawString("Weapon" , textX, textY);
-        textY += lineHeight + 15;
+        textY += lineHeight + 10;
         g2.drawString("Shield" , textX, textY);
         textY += lineHeight;
 
@@ -170,18 +198,27 @@ public class UI {
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
         value = String.valueOf(gp.player.life + "/" + gp.player.maxLife);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
+        value = String.valueOf(gp.player.mana + "/" + gp.player.maxMana);
+        textX = getXforAlignToRightText(value, tailX);
+        g2.drawString(value, textX, textY);
+        textY += lineHeight;
+
         value = String.valueOf(gp.player.strength);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
         value = String.valueOf(gp.player.dexterity);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
         value = String.valueOf(gp.player.attack);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
@@ -190,18 +227,20 @@ public class UI {
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
         value = String.valueOf(gp.player.exp);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
+
         value = String.valueOf(gp.player.coin);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
 
-        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY -15, null);
+        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY -28, null);
         textY += lineHeight;
-        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY -10, null);
+        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY -24, null);
 
     }
 

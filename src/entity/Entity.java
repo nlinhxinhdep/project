@@ -119,6 +119,7 @@ public class Entity {
                 gp.obj[i] = droppedItem;
                 gp.obj[i].worldX = worldX; // droppedItem rơi tại vị trí monster
                 gp.obj[i].worldY = worldY;
+                break;
             }
         }
     }

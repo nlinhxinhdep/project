@@ -93,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
 
-        setFullScreen();
+        // setFullScreen();
     }
 
     public void setFullScreen() {
@@ -245,7 +245,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void drawToScreen() {
-        Graphics g= getGraphics();
+        Graphics g = getGraphics();
         g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
         g.dispose();
     }

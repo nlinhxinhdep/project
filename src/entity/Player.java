@@ -159,7 +159,7 @@ public class Player extends Entity {
             contactMonster(monsterIndex);
 
             // CHECK INTERACTIVE TILE COLLISION
-                int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+            int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
             
             //CHECK EVENT teleport, trap, healing pool
             gp.eHandler.checkEvent();
@@ -362,7 +362,7 @@ public class Player extends Entity {
             generatorParticle((gp.iTile[i]), gp.iTile[i]);
 
             if(gp.iTile[i].life == 0) {
-            gp.iTile[i] = gp.iTile[i].getDestroyedForm();
+                gp.iTile[i] = gp.iTile[i].getDestroyedForm();
             }
         }
     }

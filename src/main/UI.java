@@ -380,7 +380,6 @@ public class UI {
         int slotSize = gp.tileSize + 3;
 
 
-
         // DRAW PLAYER'S ITEMS
         for (int i = 0; i < gp.player.inventory.size(); i++) {
             // EQUIP CURSOR
@@ -466,7 +465,7 @@ public class UI {
         textY += gp.tileSize*2;
         g2.drawString("Full Screen", textX, textY);
         if(commandNum == 0) {
-            g2.drawString(">", textX-25, textY);
+            g2.drawString(">", textX - 25, textY);
             if(gp.keyH.enterPressed == true) {
                 if(gp.fullScreenOn == false) {
                     gp.fullScreenOn = true;
@@ -560,8 +559,7 @@ public class UI {
         if(commandNum == 0) {
             g2.drawString(">", textX-25, textY);
             if(gp.keyH.enterPressed == true) {
-                subState = 0;
-                commandNum = 3;
+                subState = 0;       
             }
         }
     }
@@ -602,6 +600,7 @@ public class UI {
             g2.drawString(">", textX-25, textY);
             if(gp.keyH.enterPressed == true) {
                 subState = 0;
+                commandNum = 3;
             }
         }
     }

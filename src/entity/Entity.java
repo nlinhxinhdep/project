@@ -63,6 +63,7 @@ public class Entity {
     public Projectile projectile;
 
     //Item Attributes
+    public int value;
     public int attackValue;
     public int defenseValue;
     public String description = "";
@@ -78,7 +79,7 @@ public class Entity {
     public final int type_axe = 4;
     public final int type_shield = 5;
     public final int type_consumable = 6;
-
+    public final int type_pickupOnly = 7;
 
     
     public Entity(GamePanel gp) {
@@ -110,6 +111,49 @@ public class Entity {
     }
 
     public void use(Entity entity){}
+    public void checkDrop() {}
+
+    public void dropItem(Entity droppedItem) {
+        for(int i = 0; i < gp.obj.length; i++) {
+            if(gp.obj[i] == null) {
+                gp.obj[i] = droppedItem;
+                gp.obj[i].worldX = worldX; // droppedItem rơi tại vị trí monster
+                gp.obj[i].worldY = worldY;
+            }
+        }
+    }
+
+    public Color getParticleColor() {
+        Color color = null;
+        return color;
+    }
+    public int getParticleSize() {
+        int size = 0;
+        return size;
+    }
+    public int getParticleSpeed() {
+        int speed = 0;
+        return speed;
+    }
+    public int getParticleMaxLife() {
+        int maxLife = 0;
+        return maxLife;
+    }
+    public void generatorParticle(Entity generator, Entity target) {
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxLife = generator.getParticleMaxLife();
+
+        Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
+        Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
+        Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
+        Particle p4 = new Particle(gp, target, color, size, speed, maxLife, 2, 1);
+        gp.particleList.add(p1);
+        gp.particleList.add(p2);
+        gp.particleList.add(p3);
+        gp.particleList.add(p4);
+    }
 
     public void update() {
         setAction();
@@ -118,6 +162,7 @@ public class Entity {
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
+        gp.cChecker.checkEntity(this, gp.iTile);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
         
         if(this.type == type_monster && contactPlayer == true) {

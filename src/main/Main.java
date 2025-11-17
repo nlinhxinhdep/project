@@ -3,11 +3,14 @@ package main;
 import javax.swing.JFrame;
 
 public class Main {
+
+    public static JFrame window;
     public static void main(String[] args) {
-        JFrame window = new JFrame();                         // Tạo cửa sổ mới (JFrame)
+        window = new JFrame();                         // Tạo cửa sổ mới (JFrame)
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Đóng cửa sổ sẽ thoát chương trình
         window.setResizable(false);                // Không cho phép thay đổi kích thước cửa sổ
         window.setTitle("My 2D Game");                 // Đặt tiêu đề cho cửa sổ
+        window.setUndecorated(true);             // Fullscreen
 
         GamePanel gamePanel = new GamePanel();                // Tạo đối tượng GamePanel (màn hình game)
         window.add(gamePanel);                                // Thêm GamePanel vào trong cửa sổ

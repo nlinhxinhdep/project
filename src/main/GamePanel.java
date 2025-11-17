@@ -4,9 +4,14 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
+import tile_interactive.InteractiveTile;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,13 +26,17 @@ public class GamePanel extends JPanel implements Runnable {
     public final int tileSize = originalTileSize * scale; // 48x48 tile
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol;  // 768 pixels
+    public final int screenWidth = tileSize * maxScreenCol;  // 960 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
     // World settings
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    
-    
+    // Full screen
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
+    public boolean fullScreenOn = false;
     
 
     // FPS
@@ -49,9 +58,9 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity obj[] = new Entity[20];
     public Entity npc[] = new Entity[20];
     public Entity monster[] = new Entity[20];
-
+    public InteractiveTile iTile[] = new InteractiveTile[50];
     public ArrayList<Entity> projectileList = new ArrayList<>();
-    
+    public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
     
     //Game State
@@ -61,6 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int characterState = 4;
+    public final int optionsState = 5;
 
 
     public GamePanel() {
@@ -76,10 +86,25 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
+        aSetter.setInteractiveTile();
 //        playMusic(0);
         gameState = titleState;
+
+        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D)tempScreen.getGraphics();
+
+        setFullScreen();
     }
 
+    public void setFullScreen() {
+        // Lấy info màn hình đang sử dụng
+         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+         GraphicsDevice gd = ge.getDefaultScreenDevice();
+         gd.setFullScreenWindow(Main.window);
+
+         screenWidth2 = Main.window.getWidth();
+         screenHeight2 = Main.window.getHeight();
+    }
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
@@ -97,7 +122,8 @@ public class GamePanel extends JPanel implements Runnable {
             lastTime = currentTime;                    			// Cập nhật lại mốc thời gian để tính lần sau
             if (delta >= 1) {                       // Khi đủ thời gian cho 1 khung hình (delta >= 1)
                 update();                           // Cập nhật trạng thái game (vị trí nhân vật, va chạm, logic, v.v.)
-                repaint();                          // Vẽ lại màn hình game (gọi paintComponent)
+                drawToTempScreen();                 // Draw vào ảnh đệm
+                drawToScreen();                     // Draw ảnh đệm lên màn hình
                 delta--;                            // Giảm delta xuống 1 để chuẩn bị cho khung tiếp theo
             } 
         }
@@ -120,6 +146,7 @@ public class GamePanel extends JPanel implements Runnable {
     					monster[i].update();	
     				}
     				if(monster[i].alive == false){
+                        monster[i].checkDrop();
     					monster[i] = null;	
     				}
     			}
@@ -135,22 +162,43 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
             }
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
+                    if (particleList.get(i).alive == true) {
+                        particleList.get(i).update();
+                    }
+                    if (particleList.get(i).alive == false) {
+                        particleList.remove(i);
+                    }
+                }
+            }
+            for(int i = 0; i < iTile.length; i++) {
+                if(iTile[i] != null) {
+                    iTile[i].update();
+                }
+            }
     	}
     	if(gameState == pauseState) {
     		//nothing
     	}  
     }
     
-// @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);                // Gọi hàm paintComponent của lớp cha để xóa nền cũ
-        Graphics2D g2 = (Graphics2D)g;          // Ép kiểu Graphics sang Graphics2D để dùng các hàm vẽ nâng cao 
+    public void drawToTempScreen() {
+               
         // TITLE SCREEN
         if(gameState == titleState) {
         	ui.draw(g2);
         }
         else {
             tileM.draw(g2); // Vẽ bản đồ (tile map)
+
+            // Interactive tile
+            for(int i = 0; i < iTile.length; i++) {
+                if(iTile[i] != null) {
+                    iTile[i].draw(g2);
+                }
+            }
+
             // add entity to the list
             entityList.add(player);
             for(int i = 0; i < npc.length; i++) {
@@ -173,6 +221,11 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(projectileList.get(i));
                 }
             }
+            for(int i = 0; i < particleList.size(); i++) {
+                if(particleList.get(i) != null) {
+                    entityList.add(particleList.get(i));
+                }
+            }
             // sort
             Collections.sort(entityList, new Comparator<Entity>(){
             @Override
@@ -189,9 +242,13 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(g2);
              	
         }
-        g2.dispose();          
     }
     
+    public void drawToScreen() {
+        Graphics g= getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+        g.dispose();
+    }
     public void playMusic(int i) {
     	music.setFile(i);
     	music.play();

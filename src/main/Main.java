@@ -14,7 +14,13 @@ public class Main {
 
         GamePanel gamePanel = new GamePanel();                // Tạo đối tượng GamePanel (màn hình game)
         window.add(gamePanel);                                // Thêm GamePanel vào trong cửa sổ
+        
+        gamePanel.config.loadConfig();
+        if (gamePanel.fullScreenOn == true)
+        {
+            window.setUndecorated(true);
 
+        }
         window.pack();                                        // Tự căn kích thước cửa sổ theo GamePanel
         window.setLocationRelativeTo(null);                 // Đặt cửa sổ ra giữa màn hình
         window.setVisible(true);                            // Hiển thị cửa sổ lên màn hình

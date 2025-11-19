@@ -2,6 +2,8 @@ package ai;
 import java.util.ArrayList;
 import main.GamePanel;
 
+
+
 public class PathFinder {
     GamePanel gp;
     Node [][] node;
@@ -77,21 +79,17 @@ public class PathFinder {
         {
             node[col][row].solid = true;
         }
-            // Set solid node
-            //check titles
-            int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
-            if (gp.tileM.tile[tileNum].collision == true)
+           // check interactive tiles
+           for (int i = 0 ; i< gp.iTile[1].length; i++)
+           {
+            if (gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible == true   )
             {
-                node[col][row].solid = true;
+                int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
+                int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
+                node[itCol][itRow].solid = true;
+
             }
-            //set cost
-            getCost(node[col][row]);
-            col++;
-            if (col == gp.maxWorldCol)
-            {
-                col = 0;
-                row++;
-            }
+           }
              //set cost
              getCost(node[col][row]);
              col++;

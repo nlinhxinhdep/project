@@ -22,7 +22,7 @@ public class TileManager {
 		mapTileNum = new int[gp.maxMap] [gp.maxWorldCol][gp.maxWorldRow];
 		
 		getTileImage();
-		loadMap("/maps/worldV2.txt",0);
+		loadMap("/maps/worldV3.txt",0);
 		loadMap ("/maps/interior01.txt",1);
 		
 	}
@@ -72,8 +72,8 @@ public class TileManager {
 	    setup(39, "earth", false);
 	    setup(40, "wall", true);
 	    setup(41, "tree", true);
-		setup(42, "hut", false);
-		setup(43, "floor01", false);
+		setup(42, "hut", true);
+		setup(43, "floor01", true);
 		setup(44,"table01",true);
 	    
 	}

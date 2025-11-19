@@ -50,10 +50,11 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-       // worldX = gp.tileSize * 23;
-       // worldY = gp.tileSize * 21;
+       worldX = gp.tileSize * 23;
+       worldY = gp.tileSize * 21;
         worldX = gp.tileSize * 12;
-        worldY = gp.tileSize * 13;
+        worldY = gp.tileSize * 12;
+        gp.currentMap =1;
         speed = 4;
         direction = "down";
 
@@ -160,7 +161,7 @@ public class Player extends Entity {
             }
             // CHECK TILE COLLISION
             collisionOn = false;
-           // gp.cChecker.checkTile(this);
+         //   gp.cChecker.checkTile(this);
 
             //CHECK OBJ COLLISION
             int objIndex = gp.cChecker.checkObject(this, true);
@@ -407,7 +408,7 @@ public class Player extends Entity {
     }
     
     public void selectItem() {
-        int itemIndex = gp.ui.getItemIndexOnSlot();
+        int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol,gp.ui.playerSlotRow);
 
         if (itemIndex < inventory.size()) {
             

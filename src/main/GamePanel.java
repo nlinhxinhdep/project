@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     public final int maxMap =10;
-    public int currentMap =1;
+    public int currentMap = 1;
     // Full screen
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
-    Config config = new Config(this);
+    Config config = new Config(this); // config file
     Thread gameThread;
     
     // ENTITY AND OBJECT
@@ -75,7 +75,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionsState = 5;
     public final int gameOverState = 6;
-
+    public final int transitionState = 7;
+    public final int tradeState =8;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)

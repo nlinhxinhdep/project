@@ -29,7 +29,17 @@ public class NPC_OldMan extends Entity{
     
     public void setAction() {
     	
-    	actionLockCounter++;
+        if (onPath == true) {
+            // int goalCol= 12;
+            // int goalRow = 9;
+            int goalCol= (gp.player.worldX+ gp.player.solidArea.x)/gp.tileSize;
+            int goalRow = (gp.player.worldY+ gp.player.solidArea.y)/gp.tileSize;
+            
+            searchPath (goalCol,goalRow);
+
+        }
+        else{
+            actionLockCounter++;
     	if(actionLockCounter == 120) {
     		Random random = new Random();
             int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
@@ -47,10 +57,13 @@ public class NPC_OldMan extends Entity{
             }
             actionLockCounter = 0;	
     	} 
+        }
     }
     public void speak() {
         // Đưa câu thoại hiện tại vào UI
         super.speak();
+        onPath = true;
+    
     }
     
 

@@ -1,6 +1,8 @@
 package main;
 
 import javax.swing.JPanel;
+
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -45,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
     
     // System
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
@@ -75,7 +77,6 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionsState = 5;
     public final int gameOverState = 6;
-
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)

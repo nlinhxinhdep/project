@@ -435,7 +435,7 @@ public class Player extends Entity {
         switch (direction) {
             case "up":
                 if (attacking) {
-                    tempScreenY = screenY - gp.tileSize; // vung kiếm lên trên
+                    tempScreenY = screenY - gp.tileSize; // vung kiáº¿m lÃªn trÃªn
                     drawHeight = gp.tileSize * 2;
                     if (spriteNum == 1) image = attackUp1;
                     if (spriteNum == 2) image = attackUp2;
@@ -458,7 +458,7 @@ public class Player extends Entity {
 
             case "left":
                 if (attacking) {
-                    tempScreenX = screenX - gp.tileSize; // vung kiếm sang trái
+                    tempScreenX = screenX - gp.tileSize; // vung kiáº¿m sang trÃ¡i
                     drawWidth = gp.tileSize * 2;
                     if (spriteNum == 1) image = attackLeft1;
                     if (spriteNum == 2) image = attackLeft2;

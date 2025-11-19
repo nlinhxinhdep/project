@@ -7,6 +7,7 @@ public class EventHandler {
     EventRect[][][] eventRect;
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
+    int tempMap, tempCol, tempRow;
 //    Entity eventMaster; // thêm để quản lý người kích hoạt (player)
 
     public EventHandler(GamePanel gp) {

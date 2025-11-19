@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import object.OBJ_Heart;
 import object.OBJ_Key;
 import object.OBJ_ManaCrystal;
+import object.OBJ_Coin_Bronze;
 import entity.Entity;
 
 public class UI {
@@ -17,7 +18,7 @@ public class UI {
     GamePanel gp;        // tham chiếu đến GamePanel để vẽ thông tin trò chơi
     Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
     Graphics2D g2;
-    BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank;
+    BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời
     // public String message = "";       // nội dung thông báo
     // int messageCounter = 0;  // đếm thời gian hiển thị thông báo
@@ -46,10 +47,12 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;
-
         Entity cystal = new OBJ_ManaCrystal(gp);
         crystal_full = cystal.image;
         crystal_blank = cystal.image2;
+        Entity bronzeCoin = new OBJ_Coin_Bronze (gp);
+        coin = bronzeCoin.down1;
+
     }
 
     public void addMessage(String text) {
@@ -616,13 +619,107 @@ public class UI {
             width = (int)(gp.tileSize *2.5);
             height = gp.tileSize;
             drawSubWindow(x, y, width, height);
+            g2.drawImage(coin,x+1,y+10,32,32,null);
+            int price = npc.inventory.get(itemIndex).price;
+            String text = " "+ price;
+            x= getXforAlignToRightText(text, gp.tileSize*8-20);
+            g2.drawString(text, x, y+34);
+            //Buy An Iteam
+            if (gp.keyH.enterPressed == true)
+            {
+                if (npc.inventory.get(itemIndex).price > gp.player.coin)
+                {
+                    subState = 0;
+                    gp.gameState = gp.dialogueState;
+                    currentDialogue = " you need more coin to buy that !";
+                    drawDialogueScreen();
+                }
+                else if ( gp.player.inventory.size()== gp.player.maxInventorySize)
+                {
+                    subState = 0;
+                    gp.gameState = gp.dialogueState;
+                    currentDialogue = " you cannot carry any more !";
+
+                }
+                else {
+                    gp.player.coin -= npc.inventory.get(itemIndex).price;
+                    gp.player.inventory.add(npc.inventory.get(itemIndex));
+
+                }
+            }
           }
         }
         
 
     }
     public void trade_sell ()
-    {}
+    {
+        // Draw player inventory
+        drawInventory(gp.player,true);
+        int x;
+        int y;
+        int width;
+        int height;
+          //Draw npc inventory
+
+        drawInventory(npc, true);
+        //Draw Hint window
+        x = gp.tileSize*6;
+        y = gp.tileSize*9;
+        width= gp.tileSize *6;
+        height = gp.tileSize*2;
+        drawSubWindow(x, y, width, height);
+        g2.drawString ("[ESC] Back", x+24, y+60);
+        //Draw player coin window
+         x = gp.tileSize*12;
+         y = gp.tileSize*9;
+         width= gp.tileSize *6;
+         height = gp.tileSize*2;
+        drawSubWindow(x, y, width, height);
+        g2.drawString ("Your Coin:" + gp.player.coin, x+24, y+60);
+
+        // draw price window
+        int itemIndex = getItemIndexOnSlot(playerSlotCol,playerSlotRow);
+        {
+          if (itemIndex < gp.player.inventory.size())
+          {
+            x = (int )(gp.tileSize *15.5);
+            x = (int )(gp.tileSize *5.5);
+            width = (int)(gp.tileSize *2.5);
+            height = gp.tileSize;
+            drawSubWindow(x, y, width, height);
+
+            g2.drawImage(coin,x+1,y+10,32,32,null);
+            int price = gp.player.inventory.get(itemIndex).price;
+            String text = " "+ price;
+            x= getXforAlignToRightText(text, gp.tileSize*13-20);
+            g2.drawString(text, x, y+34);
+
+
+            //SEll An Iteam
+            if (gp.keyH.enterPressed == true)
+            {
+                if (gp.player.inventory.get(itemIndex) ==  gp.player.currentWeapon ||
+                gp.player.inventory.get(itemIndex) ==  gp.player.currentShield)
+                {
+                  commandNum =0;
+                  gp.gameState = gp.dialogueState;
+                  currentDialogue = " you cannot sell an equipped item !";
+                  subState =0;
+
+                }
+                else{
+                    gp.player.inventory.remove (itemIndex);
+                    gp.player.coin += price;
+                }
+                }
+            }
+          }
+        }
+        
+
+    
+
 
     public void drawOptionsScreen() {
         g2.setColor(Color.white);

@@ -13,6 +13,7 @@ public class EnvironmentManager {
     }
     public void setup(){
         lighting = new Lighting(gp, 500); //Change the circle size to adjust light radius
+        //Size should not be larger than screen diagonal length
     }
     public void draw(Graphics2D g2){
         lighting.draw(g2);

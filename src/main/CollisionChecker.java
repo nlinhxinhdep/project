@@ -63,14 +63,14 @@ public class CollisionChecker {
     
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
-        for (int i = 0; i < gp.obj[1].length; i++) { // FIXED
-            if (gp.obj[gp.currentMap][i] != null) {  //FIXED
+        for (int i = 0; i < gp.obj[1].length; i++) {
+            if (gp.obj[gp.currentMap][i] != null) {
                 // GET ENTITY'S SOLID AREA POSITION
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
                 // GET THE OBJECT'S SOLID AREA POSITION
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;  // FIXED
-                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;  // FIXED
+                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
+                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
                 // CHECK FOR COLLISION BASED ON DIRECTION
                 switch (entity.direction) {
                     case "up": entity.solidArea.y -= entity.speed; break;
@@ -78,8 +78,8 @@ public class CollisionChecker {
                     case "left":entity.solidArea.x -= entity.speed;break;
                     case "right": entity.solidArea.x += entity.speed; break;
                 }
-                if (entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)) {  // FIXED
-                    if (gp.obj[gp.currentMap][i].collision == true) {  // FIXED
+                if (entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)) {
+                    if (gp.obj[gp.currentMap][i].collision == true) {
                         entity.collisionOn = true;
                     }
                     if (player == true) {
@@ -90,25 +90,25 @@ public class CollisionChecker {
                 // RESET SOLID AREA POSITION
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].solidAreaDefaultX;  // FIXED
-                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].solidAreaDefaultY; // FIXED
+                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].solidAreaDefaultX;
+                gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].solidAreaDefaultY;
             }
         }
 
         return index;
     }
-    // check entity collision NPC OR MONSTER
+    // check entity collision
     public int checkEntity(Entity entity, Entity[][] target) {
         int index = 999;
-        for (int i = 0; i < target[1].length; i++) {  // FIXED
-            if (target[gp.currentMap][i] != null) {   // FIXED
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.currentMap][i] != null) {
                 // Lấy vị trí thực tế của solidArea entity
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
                 // Lấy vị trí thực tế của solidArea target
-                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x; // FIXED
-                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;  // FIXED
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x;
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
 
                 // Kiểm tra hướng di chuyển
                 switch (entity.direction) {
@@ -117,8 +117,8 @@ public class CollisionChecker {
                     case "left": entity.solidArea.x -= entity.speed; break;
                     case "right": entity.solidArea.x += entity.speed; break;
                 }
-                if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)) { // FIXED
-                	if(target[gp.currentMap][i] != entity) { // FIXED
+                if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)) {
+                	if(target[gp.currentMap][i] != entity) {
                 		entity.collisionOn = true;
                         index = i;	
                 	}    
@@ -126,8 +126,8 @@ public class CollisionChecker {
                 // Reset solidArea về vị trí mặc định
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].solidAreaDefaultX; // FIXED
-                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].solidAreaDefaultY;  // FIXED
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].solidAreaDefaultX;
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].solidAreaDefaultY;
             }
         }
         return index;

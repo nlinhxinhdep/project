@@ -34,10 +34,8 @@ public class GamePanel extends JPanel implements Runnable {
     // World settings
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    
-  
-    public final int maxMap =10;
-    public int currentMap = 1;
+    public final int maxMap = 10;
+    public int currentMap = 0;
     // Full screen
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
@@ -56,11 +54,10 @@ public class GamePanel extends JPanel implements Runnable {
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this); 
     public AssetSetter aSetter = new AssetSetter(this);
+    public EnvironmentManager eManager = new EnvironmentManager(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
-    Config config = new Config(this); // config file
-    public PathFinder pFinder = new PathFinder(this);
-    EnvironmentManager eManager = new EnvironmentManager(this);
+    Config config = new Config(this);
     Thread gameThread;
     
     // ENTITY AND OBJECT
@@ -82,8 +79,6 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionsState = 5;
     public final int gameOverState = 6;
-    public final int transitionState = 7;
-    public final int tradeState =8;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)
@@ -106,27 +101,21 @@ public class GamePanel extends JPanel implements Runnable {
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
 
-
-        if(fullScreenOn == true)
-        {
+        if(fullScreenOn == true){
             setFullScreen();
         }
-        
     }
-    // Retry game
-    public void retry ()
-    {
+
+    public void retry() {
         player.setDefaultPositions();
-        player.restoreLifeAndMana();
+        player.restoreLifeAndMan();
         aSetter.setNPC();
         aSetter.setMonster();
     }
-    //RESTART game
-    public void restart ()
-    {
+    public void restart() {
         player.setDefaultValues();
         player.setDefaultPositions();
-        player.restoreLifeAndMana();
+        player.restoreLifeAndMan();
         player.setItems();
         aSetter.setObject();
         aSetter.setNPC();
@@ -178,7 +167,7 @@ public class GamePanel extends JPanel implements Runnable {
     			}
     		}
     		// monster
-    		for(int i = 0; i < monster.length; i++) {
+    		for(int i = 0; i < monster[1].length; i++) {
     			if(monster[currentMap][i] != null) {
     				if(monster[currentMap][i].alive == true && monster[currentMap][i].dying == false){
     					monster[currentMap][i].update();	
@@ -233,7 +222,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Interactive tile
             for(int i = 0; i < iTile[1].length; i++) {
                 if(iTile[currentMap][i] != null) {
-                    iTile [currentMap][i].draw(g2);
+                    iTile[currentMap][i].draw(g2);
                 }
             }
 

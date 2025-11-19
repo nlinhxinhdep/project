@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
@@ -33,6 +35,7 @@ public class Entity {
 	public boolean alive = true;
 	public boolean dying = false;
 	public boolean hpBarOn = false;
+    public boolean onPath = false;
 	
 	// COUNTER
 	public int spriteCounter = 0;
@@ -63,11 +66,14 @@ public class Entity {
     public Projectile projectile;
 
     //Item Attributes
+    public ArrayList <Entity> inventory = new ArrayList <> ();
+    public final int maxInventorySize =20;
     public int value;
     public int attackValue;
     public int defenseValue;
     public String description = "";
     public int useCost;
+    public int price;
     
 
     // TYPE
@@ -114,11 +120,11 @@ public class Entity {
     public void checkDrop() {}
 
     public void dropItem(Entity droppedItem) {
-        for(int i = 0; i < gp.obj.length; i++) {
-            if(gp.obj[i] == null) {
-                gp.obj[i] = droppedItem;
-                gp.obj[i].worldX = worldX; // droppedItem rơi tại vị trí monster
-                gp.obj[i].worldY = worldY;
+        for(int i = 0; i < gp.obj[1].length; i++) {
+            if(gp.obj[gp.currentMap][i] == null) {
+                gp.obj[gp.currentMap][i] = droppedItem;
+                gp.obj[gp.currentMap][i].worldX = worldX; // droppedItem rơi tại vị trí monster
+                gp.obj[gp.currentMap][i].worldY = worldY;
                 break;
             }
         }
@@ -155,21 +161,25 @@ public class Entity {
         gp.particleList.add(p3);
         gp.particleList.add(p4);
     }
-
-    public void update() {
-        setAction();
-        collisionOn = false;
+    public void checkCollision() {
+         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
         gp.cChecker.checkEntity(this, gp.iTile);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
-        
         if(this.type == type_monster && contactPlayer == true) {
             damagePlayer(attack);
-        	
         }
+    }
+    public void update() {
+        setAction();
+        checkCollision();
+        
+        
+        	
+        
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (collisionOn == false) { 
         	switch (direction) {
@@ -181,7 +191,7 @@ public class Entity {
         }
         // ANIMATION
         spriteCounter++;
-        if (spriteCounter > 12) {
+        if (spriteCounter > 24) {
             if (spriteNum == 1) {
                 spriteNum = 2;
             } else if (spriteNum == 2) {
@@ -301,5 +311,97 @@ public class Entity {
             e.printStackTrace();
         }
         return image;
+    }
+    public void searchPath (int goalCol, int goalRow)
+    {
+        int startCol = (worldX + solidArea.x)/gp.tileSize;
+        int startRow = (worldY + solidArea.y)/gp.tileSize;
+        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+        if (gp.pFinder.search()== true)
+        {
+            // next worldX vaf world Y
+            int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+            int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+            // entity's solidAREA POSTITION
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x +solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+            if (enTopY > nextY && enLeftX >= nextX && enRightX <= nextX + gp.tileSize)
+            {
+                direction = "up";
+            
+            }
+            else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize)
+            {
+                direction = "down";
+
+            }
+            else if (enTopY >= nextY && enBottomY <= nextY + gp.tileSize )
+            {
+                // left or right
+                if (enLeftX > nextX)
+                {
+                    direction = "left";
+                }
+                else
+                {
+                    direction = "right";
+                }
+            }
+            else if (enTopY >nextY && enLeftX > nextX)
+            {
+                // up or left
+                direction = "up";
+                checkCollision();
+                if (collisionOn == true)
+                {
+                    direction = "left";
+                
+                }
+            }
+            else if (enTopY > nextY && enLeftX < nextX)
+            {
+                // up or right
+                direction = "up";
+                checkCollision();
+                if (collisionOn == true)
+                {
+                    direction = "right";
+                
+                }
+
+            }
+            else if (enTopY < nextY && enLeftX > nextX)
+            {
+                // down or left
+                direction = "down";
+                checkCollision();
+                if (collisionOn == true)
+                {
+                    direction = "left";
+                
+                }
+            }
+            else if (enTopY <nextY && enLeftX < nextX)
+            {
+                // down or right
+                direction = "down";
+                checkCollision();
+                if (collisionOn == true)
+                {
+                    direction = "right";
+                
+                }
+            }
+            // if reaches the goal, stop the search
+            // int nextCol = gp.pFinder.pathList.get(0).col;
+            // int nextRow = gp.pFinder.pathList.get(0).row;
+            // if (nextCol == goalCol && nextRow == goalRow)
+            // {
+            //     onPath = false;
+            // }
+
+        }
     }
 }

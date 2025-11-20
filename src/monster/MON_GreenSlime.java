@@ -44,21 +44,24 @@ public class MON_GreenSlime extends Entity{
 		switch(i) {
 		case 1: //GREEN SLIME
 			name = "Green Slime";
-			speed = 1;
+			defaultSpeed = 1;
+			speed = defaultSpeed;
 			maxLife = 4;
 			up1 = down1 = left1 = right1 = setup("/monster/greenslime1", gp.tileSize, gp.tileSize);
 			up2 = down2 = left2 = right2 = setup("/monster/greenslime2", gp.tileSize, gp.tileSize);
 			break;
 		case 2: //BLUE SLIME
 			name = "Blue Slime";
-			speed = 1;
+			defaultSpeed = 1;
+			speed = defaultSpeed;
 			maxLife = 10;
 			up1 = down1 = left1 = right1 = setup("/monster/blueslime1", gp.tileSize, gp.tileSize);
 			up2 = down2 = left2 = right2 = setup("/monster/blueslime2", gp.tileSize, gp.tileSize);
 			break;
 		case 3: //RED SLIME
 			name = "Red Slime";
-			speed = 2;
+			defaultSpeed = 2;
+			speed = defaultSpeed;
 			maxLife = 10;
 			up1 = down1 = left1 = right1 = setup("/monster/redslime1", gp.tileSize, gp.tileSize);
 			up2 = down2 = left2 = right2 = setup("/monster/redslime2", gp.tileSize, gp.tileSize);
@@ -99,7 +102,15 @@ public class MON_GreenSlime extends Entity{
 			if (i > 197 && projectile.alive == false && shotAvailableCounter == 30) {
 				
 				projectile.set(worldX, worldY, direction, true, this);
-				gp.projectileList.add(projectile);
+				// gp.projectileList.add(projectile);
+
+				// CHECK VACANCY
+				// for (int ii = 0; ii < gp.projectile[1].length; ii++) {
+				// 	if (gp.projectile[gp.currentMap][ii] == null) {
+				// 		gp.projectile[gp.currentMap][ii] = projectile;
+				// 		break;
+				// 	}
+				// }
 				shotAvailableCounter = 0;
 		} 
         }

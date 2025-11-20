@@ -385,18 +385,16 @@ public class UI {
     	g2.drawString(text,x,y);
     	
     }
-
-    
     
     public void drawInventory(Entity entity, boolean cursor) {
+        
+        int frameX = 0;
+        int frameY = 0;
+        int frameWidth = 0;
+        int frameHeight = 0;
+        int slotCol = 0;
+        int slotRow = 0;
 
-        int frameX;
-        int frameY;
-        int frameWidth;
-        int frameHeight;
-        int slotCol;
-        int slotRow;
-    	
         if (entity == gp.player) {
             frameX = gp.tileSize * 12;
             frameY = gp.tileSize;
@@ -414,6 +412,7 @@ public class UI {
             slotRow = npcSlotRow;
         }
 
+    	
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         // slot
@@ -433,7 +432,6 @@ public class UI {
                 g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
             }
             g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
-           // System.out.println("Drawing item is: " + entity.inventory.get(i).name);
             
             slotX += slotSize;
             
@@ -445,8 +443,7 @@ public class UI {
 
 
         // cursor
-        if(cursor==true)
-        {
+        if(cursor == true) {
             int cursorX = slotXstart + (slotSize * slotCol);
             int cursorY = slotYstart + (slotSize * slotRow);
             int cursorWidth = gp.tileSize;
@@ -476,6 +473,7 @@ public class UI {
                 }
             }
         }
+        
     }
 
     public void drawGameOverScreen() {
@@ -716,7 +714,6 @@ public class UI {
             g2.drawString(">", textX-25, textY);
             if(gp.keyH.enterPressed == true) {
                 subState = 0;
-                gp.stopMusic();
                 gp.gameState = gp.titleState;
             }
         }
@@ -737,21 +734,21 @@ public class UI {
 
     public void drawTransition() {
 
-        counter++;
+    counter++;
 
-        g2.setColor(new Color(0, 0, 0, counter * 5));
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+    g2.setColor(new Color(0, 0, 0, counter * 5));
+    g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
-        if (counter == 50) {
-            counter = 0;
-            gp.gameState = gp.playState;
-            gp.currentMap = gp.eHandler.tempMap;
-            gp.player.worldX = gp.tileSize * gp.eHandler.tempCol;
-            gp.player.worldY = gp.tileSize * gp.eHandler.tempRow;
-            gp.eHandler.previousEventX = gp.player.worldX;
-            gp.eHandler.previousEventY = gp.player.worldY;
-        }
+    if (counter == 50) {
+        counter = 0;
+        gp.gameState = gp.playState;
+        gp.currentMap = gp.eHandler.tempMap;
+        gp.player.worldX = gp.tileSize * gp.eHandler.tempCol;
+        gp.player.worldY = gp.tileSize * gp.eHandler.tempRow;
+        gp.eHandler.previousEventX = gp.player.worldX;
+        gp.eHandler.previousEventY = gp.player.worldY;
     }
+}
 
     public void drawTradeScreen() {
         switch (subState) {

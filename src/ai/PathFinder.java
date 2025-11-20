@@ -7,27 +7,28 @@ import main.GamePanel;
 public class PathFinder {
     GamePanel gp;
     Node [][] node;
-    ArrayList <Node> openList = new ArrayList <Node>();
+    ArrayList<Node> openList = new ArrayList <>();
     public ArrayList <Node> pathList = new ArrayList <>();
     Node startNode, goalNode, currentNode;
     boolean goalReached = false;
-    int step =0;
+    int step = 0;
     public PathFinder (GamePanel gp)
     {
         this.gp = gp;
         instantiateNodes();
     }
-    public void instantiateNodes()
-    {
+    public void instantiateNodes() {
         node = new Node[gp.maxWorldCol][gp.maxWorldRow];
+
         int col = 0;
         int row = 0;
-        while (col < gp.maxWorldCol && row < gp.maxWorldRow)
-        {
-            node[col][row] = new Node (col, row);
+
+        while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
+
+            node[col][row] = new Node(col, row);
+
             col++;
-            if (col == gp.maxWorldCol)
-            {
+            if (col == gp.maxWorldCol) {
                 col = 0;
                 row++;
             }
@@ -37,158 +38,133 @@ public class PathFinder {
     {
         int col = 0;
         int row = 0;
-        while (col < gp.maxWorldCol && row < gp.maxWorldRow)
-        {
-            // reset open, checked and solid state
+
+        while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
+
+            // Reset open, checked and solid state
             node[col][row].open = false;
             node[col][row].checked = false;
             node[col][row].solid = false;
 
-            col ++;
-            if (col == gp.maxWorldCol)
-            {
+            col++;
+            if (col == gp.maxWorldCol) {
                 col = 0;
-                row ++;
+                row++;
             }
         }
-        //reset other setting
+
+        // Reset other settings
         openList.clear();
         pathList.clear();
         goalReached = false;
         step = 0;
-    
-        
     }
-    public void setNodes(int startCol, int startRow, int goalCol, int goalRow)
-    {
+    // Thay thế phương thức setNodes cũ (chỉ phần gọi getCost)
+    public void setNodes(int startCol, int startRow, int goalCol, int goalRow) {
         resetNodes();
-       // set start and goal node
-       startNode = node[startCol][startRow];
-       currentNode = startNode;
-       goalNode = node[goalCol][goalRow];
-       openList.add(currentNode);
-
-       int col =0;
-       int row = 0;
-       while (col < gp.maxWorldCol && row < gp.maxWorldRow)
-       {
-        // Set solid node
-        //check titles
-        int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
-        if (gp.tileM.tile[tileNum].collision == true)
-        {
-            node[col][row].solid = true;
-        }
-           // check interactive tiles
-           for (int i = 0 ; i< gp.iTile[1].length; i++)
-           {
-            if (gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible == true   )
-            {
-                int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
-                int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
-                node[itCol][itRow].solid = true;
-
+        
+        startNode = node[startCol][startRow];
+        currentNode = startNode;
+        goalNode = node[goalCol][goalRow];
+        
+        openList.add(currentNode);
+        
+        int col = 0;
+        int row = 0;
+        
+        while(col < gp.maxWorldCol && row < gp.maxWorldRow) {
+            // SET SOLID NODE
+            // CHECK TILES
+            int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
+            if (gp.tileM.tile[tileNum].collision == true) {
+                node[col][row].solid = true;
             }
-           }
-             //set cost
-             getCost(node[col][row]);
-             col++;
-             if (col == gp.maxWorldCol) {
-                 col = 0;
-                 row++;
-             }
-       }
-        // Check interactive tiles
-        for ( int i =0; i<gp.iTile[1].length; i++)
-        {
-            if(gp.iTile[gp.currentMap][i]!= null && gp.iTile[gp.currentMap][i].destructible == true)
-            {
-                int itCol = gp.iTile [gp.currentMap][i].worldX / gp.tileSize;
-                int itRow = gp.iTile [gp.currentMap][i].worldY / gp.tileSize;
-                node[itCol][itRow].solid = true;
+
+            // CHECK INTERACTIVE TILES
+            for (int i = 0; i < gp.iTile[gp.currentMap].length; i++) {
+                if (gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible == true) {
+                    int itCol = gp.iTile[gp.currentMap][i].worldX / gp.tileSize;
+                    int itRow = gp.iTile[gp.currentMap][i].worldY / gp.tileSize;
+                    node[itCol][itRow].solid = true;
+                }
+            }
             
+            // Chỉ tính H-Cost lúc đầu, G-Cost mặc định là 0 hoặc vô cực
+            getCost(node[col][row]); 
+            
+            col++;
+            if(col == gp.maxWorldCol) {
+                col = 0;
+                row++;
             }
         }
-        //set cost
-        getCost(node[col][row]);
-        col++;
-        if (col == gp.maxWorldCol)
-        {
-            col = 0;
-            row++;
-        }
-
-       }
-
-    
-    public void getCost(Node node)
-    {
-        // G cost
-        int xDistance = Math.abs (node.col - startNode.col);
-        int yDistance = Math.abs (node.row - startNode.row);
-        node.gCost = xDistance + yDistance;
-        // H cost
-        xDistance = Math.abs (node.col - goalNode.col);
-        yDistance = Math.abs (node.row - goalNode.row);
-        node.hCost = xDistance + yDistance;
-        // F cost
-        node.fCost = node.gCost + node.hCost;
     }
+
+    // Chỉ dùng để tính Heuristic (Khoảng cách đến đích)
+    public void getCost(Node node) {
+        // H cost
+        int xDistance = Math.abs(node.col - goalNode.col);
+        int yDistance = Math.abs(node.row - goalNode.row);
+        node.hCost = xDistance + yDistance;
+        // Không tính F cost ở đây vội
+    }
+
     public boolean search()
     {
-        while (goalReached == false && step < 500)
-        {
+        while (goalReached == false && step < 500) {
 
             int col = currentNode.col;
             int row = currentNode.row;
 
-            // check the current node
+            // Check the current node
             currentNode.checked = true;
             openList.remove(currentNode);
 
-            // open the up node
-            if (row - 1 >= 0)
-            {
+            // Open the Up node
+            if (row - 1 >= 0) {
                 openNode(node[col][row - 1]);
             }
-            // open the down node   
-            if (row + 1 < gp.maxWorldRow)
-            {
-                openNode(node[col][row + 1]);
-            }
-            // open the left node
-            if (col - 1 >= 0)
-            {
+
+            // Open the left node
+            if (col - 1 >= 0) {
                 openNode(node[col - 1][row]);
             }
-           
-            //open the right node
-            if (col + 1 < gp.maxWorldCol)
-            {
+
+            // Open the down node
+            if (row + 1 < gp.maxWorldRow) {
+                openNode(node[col][row + 1]);
+            }
+
+            // Open the right node
+            if (col + 1 < gp.maxWorldCol) {
                 openNode(node[col + 1][row]);
             }
-            // find the best node
+            // Find the best node
             int bestNodeIndex = 0;
             int bestNodefCost = 999;
+
             for (int i = 0; i < openList.size(); i++) {
-                //check if this node's F cost is better
+
+                // Check if this node's F cost is better
                 if (openList.get(i).fCost < bestNodefCost) {
                     bestNodeIndex = i;
                     bestNodefCost = openList.get(i).fCost;
-                }
-                // If F cost is Equal, chec the G cost
+                } 
+                // If F cost is equal, check the G cost
                 else if (openList.get(i).fCost == bestNodefCost) {
                     if (openList.get(i).gCost < openList.get(bestNodeIndex).gCost) {
                         bestNodeIndex = i;
                     }
                 }
             }
-           // iff there is nod node in the openList, end the loop
+            // If there is no node in the openList, end the loop
             if (openList.size() == 0) {
                 break;
             }
-            // After the loop, openList [ bestNodeIndex] is the next step (= currentNode)
+
+            // After the loop, openList[bestNodeIndex] is the next step (= currentNode)
             currentNode = openList.get(bestNodeIndex);
+
             if (currentNode == goalNode) {
                 goalReached = true;
                 trackThePath();
@@ -197,27 +173,24 @@ public class PathFinder {
         }
         return goalReached;
     }
-    public void openNode(Node node)
-    {
-
-        if (node.open == false && node.checked == false && node.solid == false)
-        {
-            node.parent = currentNode;
-            openList.add(node);
+    
+    // Logic mở node quan trọng nhất
+    public void openNode(Node node) {
+        if (node.open == false && node.checked == false && node.solid == false) {
             node.open = true;
+            node.parent = currentNode;
+            node.gCost = currentNode.gCost + 1; // Tích lũy chi phí
+            node.fCost = node.gCost + node.hCost;
+            openList.add(node);
         }
-
-
-
-}
+    }
       
-    public void trackThePath ()
-    {
+    public void trackThePath() {
         Node current = goalNode;
-        while (current != startNode)
-        {
+
+        while (current != startNode) {
             pathList.add(0, current);
             current = current.parent;
         }
-    }
+}
 }

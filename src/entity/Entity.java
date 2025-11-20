@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
@@ -33,6 +35,7 @@ public class Entity {
 	public boolean alive = true;
 	public boolean dying = false;
 	public boolean hpBarOn = false;
+    public boolean onPath = false;
 	
 	// COUNTER
 	public int spriteCounter = 0;
@@ -64,11 +67,15 @@ public class Entity {
     public Projectile projectile;
 
     //Item Attributes
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
     public int value;
     public int attackValue;
     public int defenseValue;
     public String description = "";
     public int useCost;
+    public int price;
+    
     public int lightRadius;
 
     // TYPE
@@ -157,8 +164,7 @@ public class Entity {
         gp.particleList.add(p4);
     }
 
-    public void update() {
-        setAction();
+    public void checkCollision(){
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
@@ -171,6 +177,12 @@ public class Entity {
             damagePlayer(attack);
         	
         }
+    }
+
+    public void update() {
+        setAction();
+        checkCollision();
+
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (collisionOn == false) { 
         	switch (direction) {
@@ -303,4 +315,93 @@ public class Entity {
         }
         return image;
     }
+
+    public void searchPath(int goalCol, int goalRow) {
+
+        int startCol = (worldX + solidArea.x) / gp.tileSize;
+        int startRow = (worldY + solidArea.y) / gp.tileSize;
+
+        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+        // 1. CHỈ TÌM ĐƯỜNG NẾU TÌM THẤY (Tránh lỗi null path)
+        if (gp.pFinder.search() == true) {
+
+            // Lấy bước đi tiếp theo trong danh sách
+            // A* thường trả về pathList[0] là đích đến ngay cạnh nút start
+            if(gp.pFinder.pathList.size() > 0) {
+                
+                int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+                int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+
+                // Lấy tọa độ TRUNG TÂM của Entity
+                int enLeftX = worldX + solidArea.x;
+                int enRightX = worldX + solidArea.x + solidArea.width;
+                int enTopY = worldY + solidArea.y;
+                int enBottomY = worldY + solidArea.y + solidArea.height;
+                
+                // Tọa độ trung tâm thực tế của Entity (quan trọng để di chuyển mượt)
+                int enMidX = enLeftX + (solidArea.width / 2);
+                int enMidY = enTopY + (solidArea.height / 2);
+                
+                // Tọa độ trung tâm của ô Next
+                int nextMidX = nextX + (gp.tileSize / 2);
+                int nextMidY = nextY + (gp.tileSize / 2);
+
+                // --- LOGIC DI CHUYỂN ĐƠN GIẢN HÓA ---
+                
+                // Ưu tiên di chuyển theo trục nào xa hơn để trông tự nhiên
+                // Hoặc đơn giản là kiểm tra vị trí tương đối
+                
+                if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+                    // Trường hợp 1: Chỉ cần đi lên
+                    direction = "up";
+                }
+                else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+                    // Trường hợp 2: Chỉ cần đi xuống
+                    direction = "down";
+                }
+                else if (enTopY >= nextY && enBottomY < nextY + gp.tileSize) {
+                    // Trường hợp 3: Chỉ cần đi ngang (Trái/Phải)
+                    if (enLeftX > nextX) direction = "left";
+                    if (enLeftX < nextX) direction = "right";
+                }
+                else {
+                    // Trường hợp 4: Cần đi chéo hoặc tìm đường né vật cản
+                    // Logic: So sánh trung tâm để quyết định hướng chính
+                    // Nếu khoảng cách dọc lớn hơn ngang -> ưu tiên đi dọc
+                    
+                    if(enTopY > nextY && enLeftX > nextX) { // Cần đi Up hoặc Left
+                        direction = "up";
+                        checkCollision();
+                        if(collisionOn) direction = "left";
+                    }
+                    else if(enTopY > nextY && enLeftX < nextX) { // Cần đi Up hoặc Right
+                        direction = "up";
+                        checkCollision();
+                        if(collisionOn) direction = "right";
+                    }
+                    else if(enTopY < nextY && enLeftX > nextX) { // Cần đi Down hoặc Left
+                        direction = "down";
+                        checkCollision();
+                        if(collisionOn) direction = "left";
+                    }
+                    else if(enTopY < nextY && enLeftX < nextX) { // Cần đi Down hoặc Right
+                        direction = "down";
+                        checkCollision();
+                        if(collisionOn) direction = "right";
+                    }
+                }
+                
+                // Điều kiện dừng: Khi đã đến rất gần đích cuối cùng
+                // int nextCol = gp.pFinder.pathList.get(0).col;
+                // int nextRow = gp.pFinder.pathList.get(0).row;
+                
+                // if (nextCol == goalCol && nextRow == goalRow) {
+                //     // Bạn có thể muốn check kỹ hơn (vd: khoảng cách < 10 pixel) thì mới dừng
+                //     onPath = false; 
+                // }
+            }
+        }
+    }
 }
+

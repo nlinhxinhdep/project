@@ -22,7 +22,7 @@ public class Player extends Entity {
     public int standCounter = 0;
     public int hasKey = 0;
     public boolean attackCanceled = false;
-    public ArrayList<Entity> inventory = new ArrayList<>();
+    // public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
     public boolean lightUpdated = false;
     
@@ -68,7 +68,7 @@ public class Player extends Entity {
         life = maxLife;
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 300;
 //        currentWeapon = new OBJ_Sword_Normal(gp);
         currentWeapon = new OBJ_Axe(gp);
         currentShield = new OBJ_Shield_Wood(gp);
@@ -447,7 +447,8 @@ public class Player extends Entity {
     }
     
     public void selectItem() {
-        int itemIndex = gp.ui.getItemIndexOnSlot();
+
+        int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
 
         if (itemIndex < inventory.size()) {
             

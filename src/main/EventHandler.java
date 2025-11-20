@@ -55,6 +55,7 @@ public class EventHandler {
             // TELEPORT
             else if (hit(0,10,39, "any") == true) teleport(1,12,13);
             else if (hit(1,12,13, "any") == true) teleport(0,10,39);
+            else if(hit(1,12,9,"up") == true) speak(gp.npc[1][0]);
         }
     }
 
@@ -110,12 +111,25 @@ public class EventHandler {
     }
 
     public void teleport(int map, int col, int row) {
-        gp.currentMap = map;
-        gp.player.worldX = gp.tileSize * col;
-        gp.player.worldY = gp.tileSize * row;
-        previousEventX = gp.player.worldX;
-        previousEventY = gp.player.worldY;
+        gp.gameState = gp.transitionState;
+        tempMap = map;
+        tempCol = col;
+        tempRow = row;
+        // gp.currentMap = map;
+        // gp.player.worldX = gp.tileSize * col;
+        // gp.player.worldY = gp.tileSize * row;
+        // previousEventX = gp.player.worldX;
+        // previousEventY = gp.player.worldY;
         canTouchEvent = false;
         gp.playSE(13);
+    }
+
+    public void speak(Entity entity) {
+
+        if (gp.keyH.enterPressed == true) {
+            gp.gameState = gp.dialogueState;
+            gp.player.attackCanceled = true;
+            entity.speak();
+        }
     }
 }

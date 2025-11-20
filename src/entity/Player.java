@@ -148,14 +148,65 @@ public class Player extends Entity {
     		attacking();
     	}
     	else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enterPressed) {
-            if (keyH.upPressed) {
+            int currentSpeed = speed;
+            //CHECK DIAGONAL MOVEMENT
+            boolean checkDiagonal = (keyH.upPressed == true || keyH.downPressed == true) &&
+                                    (keyH.leftPressed == true || keyH.rightPressed == true);
+
+            if (checkDiagonal) {
+                currentSpeed = (int)(speed * 0.8971); // Reduce speed for diagonal movement
+            }
+
+            //MOVING UP OR DOWN
+            boolean movingY = false;
+            if (keyH.upPressed ==true){
                 direction = "up";
-            } else if (keyH.downPressed) {
+                movingY = true;
+            }
+            else if (keyH.downPressed ==true){
                 direction = "down";
-            } else if (keyH.leftPressed) {
+                movingY = true;
+            }
+
+            if (movingY) {
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+                gp.cChecker.checkObject(this, true);
+                gp.cChecker.checkEntity(this, gp.npc);
+                gp.cChecker.checkEntity(this, gp.monster);
+                gp.cChecker.checkEntity(this, gp.iTile);
+                gp.eHandler.checkEvent();
+                //CHECK OBJ COLLISION
+                if (collisionOn == false) {
+                    if (keyH.upPressed) worldY -= currentSpeed;
+                    else if (keyH.downPressed) worldY += currentSpeed;
+                }
+            }
+
+            //MOVING LEFT OR RIGHT
+            boolean movingX = false;
+            if (keyH.leftPressed ==true){
                 direction = "left";
-            } else if (keyH.rightPressed) {
+                movingX = true;
+            }
+            else if (keyH.rightPressed ==true){
                 direction = "right";
+                movingX = true;
+            }
+
+            if (movingX) {
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+                gp.cChecker.checkObject(this, true);
+                gp.cChecker.checkEntity(this, gp.npc);
+                gp.cChecker.checkEntity(this, gp.monster);
+                gp.cChecker.checkEntity(this, gp.iTile);
+                gp.eHandler.checkEvent();
+                //CHECK OBJ COLLISION
+                if (collisionOn == false) {
+                    if (keyH.leftPressed) worldX -= currentSpeed;
+                    else if (keyH.rightPressed) worldX += currentSpeed;
+                }
             }
             // CHECK TILE COLLISION
             collisionOn = false;
@@ -178,16 +229,7 @@ public class Player extends Entity {
             
             //CHECK EVENT teleport, trap, healing pool
             gp.eHandler.checkEvent();
-            
-            // IF COLLISION IS FALSE, PLAYER CAN MOVE
-            if (collisionOn == false && keyH.enterPressed == false) {
-                switch (direction) {
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "left": worldX -= speed; break;
-                    case "right": worldX += speed; break;
-                }
-            }
+
             if(keyH.enterPressed == true && attackCanceled == false) {
                 gp.playSE(7);
                 attacking = true;
@@ -206,12 +248,15 @@ public class Player extends Entity {
                 }
                 spriteCounter = 0;
             }
-            else{
-                standCounter++;
-                if(standCounter == 20){
-                    standCounter = 0;
-                    spriteNum = 1;
-                }
+
+            standCounter = 0;
+        }
+        // PLAYER IS NOT MOVING
+        else{
+            standCounter++;
+            if(standCounter == 20){
+                standCounter = 0;
+                spriteNum = 1;
             }
         }
 

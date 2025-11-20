@@ -427,7 +427,8 @@ public class UI {
         for (int i = 0; i < entity.inventory.size(); i++) {
             // EQUIP CURSOR
             if (entity.inventory.get(i) == entity.currentWeapon ||
-                entity.inventory.get(i) == entity.currentShield) {
+                entity.inventory.get(i) == entity.currentShield ||
+                entity.inventory.get(i) == entity.currentLight) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
             }
@@ -714,6 +715,7 @@ public class UI {
             g2.drawString(">", textX-25, textY);
             if(gp.keyH.enterPressed == true) {
                 subState = 0;
+                gp.stopMusic();
                 gp.gameState = gp.titleState;
             }
         }
@@ -849,18 +851,21 @@ public class UI {
 
         // BUY AN ITEM
         if (gp.keyH.enterPressed == true) {
-            if (npc.inventory.get(itemIndex).price > gp.player.coin) {
-                subState = 0;
-                gp.gameState = gp.dialogueState;
-                currentDialogue = "You need more coin to buy that!";
-                drawDialogueScreen();
-            } else if (gp.player.inventory.size() == gp.player.maxInventorySize) {
-                subState = 0;
-                gp.gameState = gp.dialogueState;
-                currentDialogue = "You cannot carry any more!";
+            if (itemIndex < npc.inventory.size() && itemIndex >= 0) {
+                if (npc.inventory.get(itemIndex).price > gp.player.coin) {
+                    subState = 0;
+                    gp.gameState = gp.dialogueState;
+                    currentDialogue = "You need more coin to buy that!";
+                } else if (gp.player.inventory.size() == gp.player.maxInventorySize) {
+                    subState = 0;
+                    gp.gameState = gp.dialogueState;
+                    currentDialogue = "You cannot carry any more!";
+                } else {
+                    gp.player.coin -= npc.inventory.get(itemIndex).price;
+                    gp.player.inventory.add(npc.inventory.get(itemIndex));
+                }
             } else {
-                gp.player.coin -= npc.inventory.get(itemIndex).price;
-                gp.player.inventory.add(npc.inventory.get(itemIndex));
+                // slot trống -> bỏ qua hoặc hiện thông báo nhẹ
             }
         }
     }
@@ -908,16 +913,19 @@ public class UI {
 
         // SELL AN ITEM
         if (gp.keyH.enterPressed == true) {
-            if(gp.player.inventory.get(itemIndex)==gp.player.currentWeapon ||
-               gp.player.inventory.get(itemIndex)==gp.player.currentShield) {
-                commandNum = 0;
-                subState = 0;
-                gp.gameState = gp.dialogueState;
-                currentDialogue = "You cannot sell an equipped item!";
-            }
-            else {
-                gp.player.coin += (gp.player.inventory.get(itemIndex).price/2);
-                gp.player.inventory.remove(itemIndex);
+            if (itemIndex < gp.player.inventory.size() && itemIndex >= 0) {
+                if (gp.player.inventory.get(itemIndex) == gp.player.currentWeapon ||
+                    gp.player.inventory.get(itemIndex) == gp.player.currentShield) {
+                    commandNum = 0;
+                    subState = 0;
+                    gp.gameState = gp.dialogueState;
+                    currentDialogue = "You cannot sell an equipped item!";
+                } else {
+                    gp.player.coin += (gp.player.inventory.get(itemIndex).price / 2);
+                    gp.player.inventory.remove(itemIndex);
+                }
+            } else {
+                // slot trống -> bỏ qua
             }
         }
     }

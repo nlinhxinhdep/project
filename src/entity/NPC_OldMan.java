@@ -18,6 +18,7 @@ public class NPC_OldMan extends Entity{
         
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+        collision = false;
     }
     public void getImage() {
         up1 = setup("/npc/oldman_up_1", gp.tileSize, gp.tileSize);

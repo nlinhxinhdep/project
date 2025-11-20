@@ -22,7 +22,9 @@ public class Player extends Entity {
     public int standCounter = 0;
     public int hasKey = 0;
     public boolean attackCanceled = false;
-    
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
+    public boolean lightUpdated = false;
     
     public Player(GamePanel gp, KeyHandler keyH){	
     	super(gp);
@@ -418,6 +420,17 @@ public class Player extends Entity {
                 defense = getDefense();
             }
             
+            if (selectedItem.type == type_light) {
+                if(currentLight == selectedItem) {
+                    // Turn off the light
+                    currentLight = null;
+                } else {
+                    // Equip the new light source
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
+            }
+
             if (selectedItem.type == type_consumable) {
                 selectedItem.use(this);
                 inventory.remove(itemIndex);

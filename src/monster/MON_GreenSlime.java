@@ -26,25 +26,44 @@ public class MON_GreenSlime extends Entity{
 		exp = 2;
 		projectile = new OBJ_Rock(gp);
 		
-		solidArea.x = 3;
-		solidArea.y = 18;
-		solidArea.width = 42;
-		solidArea.height = 30;
+		solidArea.x = 2;
+		solidArea.y = 10;
+		solidArea.width = 44;
+		solidArea.height = 38;
 		
 		solidAreaDefaultX = solidArea.x; 
 		solidAreaDefaultY = solidArea.y; 
 		
 		getImage();
+		life = maxLife;
 	}
 	public void getImage() {
-	    up1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
-	    up2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
-	    down1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
-	    down2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
-	    left1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
-	    left2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
-	    right1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
-	    right2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
+		//Random 3 types of slime
+		Random random = new Random();
+        int i = random.nextInt(3) + 1;
+		switch(i) {
+		case 1: //GREEN SLIME
+			name = "Green Slime";
+			speed = 1;
+			maxLife = 4;
+			up1 = down1 = left1 = right1 = setup("/monster/greenslime1", gp.tileSize, gp.tileSize);
+			up2 = down2 = left2 = right2 = setup("/monster/greenslime2", gp.tileSize, gp.tileSize);
+			break;
+		case 2: //BLUE SLIME
+			name = "Blue Slime";
+			speed = 1;
+			maxLife = 10;
+			up1 = down1 = left1 = right1 = setup("/monster/blueslime1", gp.tileSize, gp.tileSize);
+			up2 = down2 = left2 = right2 = setup("/monster/blueslime2", gp.tileSize, gp.tileSize);
+			break;
+		case 3: //RED SLIME
+			name = "Red Slime";
+			speed = 2;
+			maxLife = 10;
+			up1 = down1 = left1 = right1 = setup("/monster/redslime1", gp.tileSize, gp.tileSize);
+			up2 = down2 = left2 = right2 = setup("/monster/redslime2", gp.tileSize, gp.tileSize);
+			break;
+		}
 	}
 
 	// public void update() {

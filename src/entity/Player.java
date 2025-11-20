@@ -22,7 +22,7 @@ public class Player extends Entity {
     public int standCounter = 0;
     public int hasKey = 0;
     public boolean attackCanceled = false;
-    public ArrayList<Entity> inventory = new ArrayList<>();
+    // public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
     public boolean lightUpdated = false;
     

@@ -79,6 +79,8 @@ public class Entity {
     public int useCost;
     public int price;
     public int knockBackPower;
+    public boolean stackable = false;
+    public int amount = 1;
     
     public int lightRadius;
 

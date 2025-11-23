@@ -518,11 +518,16 @@ public class Player extends Entity {
             }
 
             if (selectedItem.type == type_consumable) {
-                if(selectedItem.amount > 1) {
+                if(selectedItem.use(this))
+                {
+                    if(selectedItem.amount > 1) {
                     selectedItem.amount--;
-                } else {
-                    inventory.remove(itemIndex);
+                    } else {
+                        inventory.remove(itemIndex);
+                    }
                 }
+                //selectedItem.use(this);
+                //inventory.remove(itemIndex);
             }
         }
     }

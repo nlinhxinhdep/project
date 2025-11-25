@@ -494,6 +494,9 @@ public class Entity {
                 }
             }
         }
+
+        user.solidArea.x = user.solidAreaDefaultX;
+        user.solidArea.y = user.solidAreaDefaultY;
         return index;
     }
 }

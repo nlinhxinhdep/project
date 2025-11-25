@@ -17,7 +17,7 @@ import entity.Entity;
 public class UI {
 
     GamePanel gp;        // tham chiếu đến GamePanel để vẽ thông tin trò chơi
-    Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
+    public Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
     Graphics2D g2;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời

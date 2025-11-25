@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.awt.Color;
-
+import tile.Map;
 public class GamePanel extends JPanel implements Runnable {
 
-    // SCREEN SETTINGS
+    // SCREEN SETTINGSX
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
 
@@ -59,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EventHandler eHandler = new EventHandler(this);
     Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
+    Map map = new Map(this) ;
     Thread gameThread;
     
     // ENTITY AND OBJECT
@@ -84,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int transitionState = 7;
     public final int tradeState = 8;
     public final int sleepState = 9;
+    public final int mapState = 10; 
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)
@@ -222,6 +224,12 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == titleState) {
         	ui.draw(g2);
         }
+
+        // MAP SCREEN 
+        else if(gameState == mapState){
+            map.drawFullMapScreen(g2);
+        }
+        // OTHERS
         else {
             tileM.draw(g2); // Vẽ bản đồ (tile map)
 
@@ -275,6 +283,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             //ENVIRONMENT
             eManager.draw(g2);
+
+            // MINI MAP
+            map.drawMiniMap(g2);
 
             //UI
             ui.draw(g2);

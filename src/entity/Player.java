@@ -22,7 +22,6 @@ public class Player extends Entity {
     public int standCounter = 0;
     public int hasKey = 0;
     public boolean attackCanceled = false;
-    //public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
     public boolean lightUpdated = false;
     
@@ -51,11 +50,16 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
+        //Vi tri map chính
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
+        
+        // Chỉnh sanh map 1
         // worldX = gp.tileSize * 12;
-        // worldY = gp.tileSize * 13;
-        defaultSpeed = 4;
+        // worldY = gp.tileSize * 12;
+        // gp.currentMap = 1;
+
+        defaultSpeed = 6;
         speed = defaultSpeed;
         direction = "down";
 
@@ -94,6 +98,7 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
+        // inventory.add(new OBJ_Sword_Normal(gp));
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;

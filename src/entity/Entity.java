@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
 
-public class Entity {
+public abstract class Entity {
 	GamePanel gp;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
@@ -147,7 +147,7 @@ public class Entity {
 
 
 
-    public boolean use(Entity entity){ return false;}
+    public boolean use(Entity entity){return false;}
     public void interact(Entity entity){}
     public void checkDrop() {}
 
@@ -494,6 +494,9 @@ public class Entity {
                 }
             }
         }
+
+        user.solidArea.x = user.solidAreaDefaultX;
+        user.solidArea.y = user.solidAreaDefaultY;
         return index;
     }
 }

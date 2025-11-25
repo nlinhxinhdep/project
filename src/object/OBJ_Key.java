@@ -22,6 +22,7 @@ public class OBJ_Key extends Entity {
 	public boolean use(Entity entity) {
 		gp.gameState = gp.dialogueState;
 		int objIndex = getDetected(entity, gp.obj, "Door");
+		// System.out.println("Detected obj index: " + objIndex);
 		if (objIndex != 999) {
 			gp.ui.currentDialogue = "You use the " + name + " to open the door.";
 			gp.playSE(3);

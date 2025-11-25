@@ -28,7 +28,7 @@ public class OBJ_Chest extends Entity {
         solidAreaDefaultY = solidArea.y;
     }
 
-    public void interact() {
+    public void interact(Entity entity) {
 
         gp.gameState = gp.dialogueState;
 
@@ -38,11 +38,11 @@ public class OBJ_Chest extends Entity {
             StringBuilder sb = new StringBuilder();
             sb.append("You open the chest and find a " + loot.name + "!");
 
-            if (!gp.player.canObtainItem(loot)) {
+            if (gp.player.inventory.size() == gp.player.maxInventorySize) {
                 sb.append("\nBut you cannot carry any more!");
             } else {
                 sb.append("\nYou obtain the " + loot.name + "!");
-                // gp.player.inventory.add(loot);
+                gp.player.inventory.add(loot);
                 down1 = image2;
                 opened = true;
             }

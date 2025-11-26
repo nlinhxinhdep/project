@@ -33,7 +33,7 @@ public class MON_GreenSlime extends Entity{
 		
 		solidAreaDefaultX = solidArea.x; 
 		solidAreaDefaultY = solidArea.y; 
-		
+
 		getImage();
 		life = maxLife;
 	}
@@ -68,73 +68,27 @@ public class MON_GreenSlime extends Entity{
 			break;
 		}
 	}
+		
 
-	// public void update() {
-	// 	super.update();
-
-	// 	int xDistance = Math.abs(worldX - gp.player.worldX);
-	// 	int yDistance = Math.abs(worldY - gp.player.worldY);
-	// 	int tileDistance = (xDistance + yDistance) / gp.tileSize;
-
-	// 	if (onPath == false && tileDistance < 5) {
-	// 		int i = new Random().nextInt(100) + 1;
-	// 		if (i > 50) {
-	// 			onPath = true;
-	// 		}
-	// 	}
-
-	// 	// if (onPath == true && tileDistance > 20) {
-	// 	// 	onPath = false;
-	// 	// }
-	// }
-	
 	public void setAction() {
+
 		if (onPath == true) {
+			// Check if it stop chasing 
+			checkStopChasingOrNot(gp.player,15,100);
 
-            // int goalCol=12;
-            // int goalRow=9;
-            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
-            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+			// Search the direction to go 
+            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
 
-            searchPath(goalCol, goalRow);
-
-			int i = new Random().nextInt(200)+1;
-			if (i > 197 && projectile.alive == false && shotAvailableCounter == 30) {
-				
-				projectile.set(worldX, worldY, direction, true, this);
-				// gp.projectileList.add(projectile);
-
-				// CHECK VACANCY
-				// for (int ii = 0; ii < gp.projectile[1].length; ii++) {
-				// 	if (gp.projectile[gp.currentMap][ii] == null) {
-				// 		gp.projectile[gp.currentMap][ii] = projectile;
-				// 		break;
-				// 	}
-				// }
-				shotAvailableCounter = 0;
-		} 
+			// Check if it shoot the projectile 
+			checkShootOrNot(200,30);
         }
-        else{
-            actionLockCounter++;
-            if(actionLockCounter == 120) {
-                Random random = new Random();
-                int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
-                if (i % 4 == 0) {
-                    direction = "up";
-                }
-                if (i % 4 == 1) {
-                    direction = "down";
-                }
-                if (i % 4 == 2) {
-                    direction = "left";
-                }
-                if (i % 4 == 3) {
-                    direction = "right";
-                }
-                actionLockCounter = 0;	
-            } 
-        }
-    	
+		else {
+			// Check if it start chasing 
+			checkStartChasingOrNot(gp.player,5,100);
+
+			// Get a random direction
+			getRandomDirection();
+		}
 	}
 	public void damageReaction(){
 		actionLockCounter = 0;
@@ -155,3 +109,4 @@ public class MON_GreenSlime extends Entity{
 		}
 	}
 }
+

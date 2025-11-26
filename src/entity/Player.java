@@ -93,6 +93,7 @@ public class Player extends Entity {
         life = maxLife;
         mana = maxMana;
         invincible = false;
+        transparent = false;
     }
     public void setItems() {
         inventory.clear();
@@ -166,11 +167,51 @@ public class Player extends Entity {
         guardRight = setup("/player/boy_guard_right", gp.tileSize, gp.tileSize);
     }
     public void update() {
-    	if(attacking == true) {
+
+        if(knockBack == true) {
+
+            // CHECK TILE COLLISION
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+
+            //CHECK OBJ COLLISION
+            gp.cChecker.checkObject(this, true);
+
+            // CHECK NPC COLLISION
+            gp.cChecker.checkEntity(this, gp.npc);
+
+            //CHECK MONSTER COLLISION
+            gp.cChecker.checkEntity(this, gp.monster);
+
+            // CHECK INTERACTIVE TILE COLLISION
+            gp.cChecker.checkEntity(this, gp.iTile);
+
+            if (collisionOn == true) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+            else {
+                switch (knockBackDirection) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            }
+            knockBackCounter++;
+            if (knockBackCounter == 10) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+        }
+    	else if(attacking == true) {
     		attacking();
     	}
         else if (keyH.spacePressed == true) {
         guarding = true;
+        guardCounter ++;
     }
     	else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enterPressed) {
             int currentSpeed = speed;
@@ -264,6 +305,7 @@ public class Player extends Entity {
             attackCanceled = false;
             gp.keyH.enterPressed = false;
             guarding = false;
+            guardCounter = 0; 
             // ANIMATION
             spriteCounter++;
             if (spriteCounter > 12) {
@@ -285,6 +327,7 @@ public class Player extends Entity {
                 spriteNum = 1;
             }
             guarding = false;
+            guardCounter = 0;
         }
 
         if(gp.keyH.shotKeyPressed == true && projectile.alive == false 
@@ -401,8 +444,11 @@ public class Player extends Entity {
                 if(knockBackPower > 0)
                 {
                     setKnockBack(gp.monster[gp.currentMap][i],attacker,knockBackPower);
-
                 }
+                if (gp.monster[gp.currentMap][i].offBalance == true) {
+                    attack *= 5;
+                }
+
 
                 int damage = attack - gp.monster[gp.currentMap][i].defense;
                 if (damage < 0) {

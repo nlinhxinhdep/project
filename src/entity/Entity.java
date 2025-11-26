@@ -43,6 +43,7 @@ public abstract class Entity {
     public String knockBackDirection;
     public boolean guarding = false;
     public boolean transparent = false;
+    public boolean offBalance = false;
 	
 	// COUNTER
 	public int spriteCounter = 0;
@@ -52,6 +53,8 @@ public abstract class Entity {
 	int dyingCounter = 0;
 	int hpBarCounter = 0;
     int knockBackCounter = 0;
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
 
 	// CHARACTER ATTRIBUTES
 	public String name;
@@ -302,6 +305,14 @@ public abstract class Entity {
         if(shotAvailableCounter < 30){
             shotAvailableCounter++;
         }
+
+        if (offBalance == true) {
+            offBalanceCounter++;
+            if (offBalanceCounter > 60) {
+                offBalance = false;
+                offBalanceCounter = 0;
+        }
+        }
     }
     public void checkAttackOrNot (int rate, int straight, int horizontal) {
 
@@ -469,9 +480,21 @@ public abstract class Entity {
             String canGuardDirection = getOppositeDirection(direction);
 
             if (gp.player.guarding == true && gp.player.direction.equals(canGuardDirection)) {
-                
-                damage /= 3;
-                gp.playSE(15);
+
+                // Parry
+                if (gp.player.guardCounter < 10) {
+                    damage = 0;
+                    gp.playSE(16);
+                    setKnockBack(this, gp.player, knockBackPower);
+                    offBalance = true;
+                    spriteCounter = -60;
+                 }
+
+                // Normal guard
+                else {
+                    damage /= 3;
+                    gp.playSE(15);
+                }
             }
             else {
                 // Not guarding
@@ -482,6 +505,7 @@ public abstract class Entity {
             }
             if (damage != 0) {
                 gp.player.transparent = true;
+                setKnockBack(gp.player,this,knockBackPower);
             }
             
             gp.player.life -= damage;

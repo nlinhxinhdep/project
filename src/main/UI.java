@@ -741,6 +741,7 @@ public class UI {
                 subState = 0;
                 gp.stopMusic();
                 gp.gameState = gp.titleState;
+                gp.resetGame(true);
             }
         }
 

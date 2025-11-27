@@ -66,6 +66,12 @@ public class Lighting {
 
         g2.dispose(); //Dispose the graphics object
     }
+
+    public void resetDay() {
+        dayState = day;
+        filterAlpha = 0f;
+    }
+
     public void update() {
 
         if(gp.player.lightUpdated == true){

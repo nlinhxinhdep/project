@@ -44,7 +44,8 @@ public abstract class Entity {
     public boolean guarding = false;
     public boolean transparent = false;
     public boolean offBalance = false;
-	
+	public Entity loot;
+    public boolean opened = false;
 	// COUNTER
 	public int spriteCounter = 0;
 	public int actionLockCounter = 0;
@@ -156,6 +157,8 @@ public abstract class Entity {
         return goalRow;
     }
     public void setAction() {}
+
+    public void setLoot (Entity loot) {}
     
     public void damageReaction(){
     	

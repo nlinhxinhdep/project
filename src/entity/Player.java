@@ -438,8 +438,7 @@ public class Player extends Entity {
     public void interactNPC(int i) {
     	if(gp.keyH.enterPressed == true){
     		if (i != 999) {      
-                attackCanceled = true;  	
-            	gp.gameState = gp.dialogueState;          
+                attackCanceled = true;  	          
                 gp.npc[gp.currentMap][i].speak();           	
     		}      
     	}  

@@ -3,8 +3,11 @@ package main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -15,10 +18,10 @@ import object.OBJ_ManaCrystal;
 import entity.Entity;
 
 public class UI {
-
     GamePanel gp;        // tham chiếu đến GamePanel để vẽ thông tin trò chơi
     public Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
     Graphics2D g2;
+    Font maruMonica;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời
     // public String message = "";       // nội dung thông báo
@@ -38,9 +41,20 @@ public class UI {
     int charIndex = 0;
     String combinedText = "";
     
+    
 
+    
     public UI(GamePanel gp) {
         this.gp = gp;
+        InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
+        try { 
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         arial_40 = new Font("Arial", Font.PLAIN, 40); // tạo font 40px
         arial_80B = new Font("Arial", Font.BOLD, 80);
@@ -68,7 +82,7 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        g2.setFont(arial_40);
+        g2.setFont(maruMonica);
         g2.setColor(Color.white);
         
         // TITLE STATE

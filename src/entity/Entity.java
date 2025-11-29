@@ -96,6 +96,7 @@ public class Entity {
     public int amount = 1;
     
     public int lightRadius;
+    public int durability = 100;
 
     // TYPE
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -259,7 +260,6 @@ public class Entity {
     }
 
     public void update() {
-
         if(knockBack == true) {
             checkCollision();
             if (collisionOn == true) {
@@ -326,7 +326,7 @@ public class Entity {
             if (offBalanceCounter > 60) {
                 offBalance = false;
                 offBalanceCounter = 0;
-        }
+            }
         }
     }
     public void checkAttackOrNot (int rate, int straight, int horizontal) {

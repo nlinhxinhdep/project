@@ -527,7 +527,10 @@ public class UI {
                     g2.drawString(line, textX, textY);
                     textY += 32;
                 }
+
+                g2.drawString("Durability: " + entity.inventory.get(itemIndex).durability, textX, textY + 100);
             }
+
         }
         
     }
@@ -903,7 +906,7 @@ public class UI {
             g2.drawImage(coin,x+10,y+8,32,32,null);
             int price = npc.inventory.get(itemIndex).price;
             String text = "" + price;
-            x=getXforAlignToRightText(text, gp.tileSize*8);
+            x = getXforAlignToRightText(text, gp.tileSize*8);
             g2.drawString(text, x, y+34);
         }
 

@@ -33,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;  // 960 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
     // World settings
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
+    public int maxWorldCol;
+    public int maxWorldRow;
     public final int maxMap = 20;
     public int currentMap = 0;
     // Full screen
@@ -91,6 +91,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int mapState = 10;
     public Object projectileList; 
 
+    // AREA
+    public int currentArea;
+    public int nextArea;
+    public final int outside = 50;
+    public final int indoor = 51;
+    public final int dungeon = 52;
+
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)
         this.setBackground(Color.black);                                 // Đặt màu nền là màu đen
@@ -108,6 +116,7 @@ public class GamePanel extends JPanel implements Runnable {
 //        playMusic(0);
         eManager.setup();
         gameState = titleState;
+        currentArea = outside;
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -313,6 +322,26 @@ public class GamePanel extends JPanel implements Runnable {
     public void playSE(int i) {
     	se.setFile(i);
     	se.play();
+    }
+    public void changeArea() {
+
+        if (nextArea != currentArea) {
+
+            stopMusic();
+
+            if (nextArea == outside) {
+                playMusic(0);
+            }
+            if (nextArea == indoor) {
+                playMusic(17);
+            }
+            if (nextArea == dungeon) {
+                playMusic(18);
+            }
+        }
+
+        currentArea = nextArea;
+        aSetter.setMonster();// making monsters respawn
     }
 
 }

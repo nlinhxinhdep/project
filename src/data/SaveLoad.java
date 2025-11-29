@@ -8,17 +8,7 @@ import java.io.ObjectOutputStream;
 
 // import entity.Entity;
 import main.GamePanel;
-// import object.OBJ_Axe;
-// import object.OBJ_Boots;
-// import object.OBJ_Chest;
-// import object.OBJ_Door;
-// import object.OBJ_Key;
-// import object.OBJ_Lantern;
-// import object.OBJ_Potion_Red;
-// import object.OBJ_Shield_Blue;
-// import object.OBJ_Shield_Wood;
-// import object.OBJ_Sword_Normal;
-// import object.OBJ_Tent;
+
 public class SaveLoad {
 
     GamePanel gp;
@@ -26,8 +16,6 @@ public class SaveLoad {
     public SaveLoad(GamePanel gp) {
         this.gp = gp;
     }
-
-    
 
     public void save() {
 

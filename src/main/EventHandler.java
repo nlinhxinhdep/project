@@ -58,14 +58,15 @@ public class EventHandler{
         }
 
         if (canTouchEvent == true) {
-            // DAMAGE PIT
-            if (hit(0,27, 16, "right") == true) damagePit(gp.dialogueState);
-            // HEALING POOL
-            else if (hit(0,23, 12, "up") == true) healingPool(gp.dialogueState);
-            // TELEPORT
-            else if (hit(0,10,39, "any") == true) teleport(1,12,13);
-            else if (hit(1,12,13, "any") == true) teleport(0,10,39);
-            else if(hit(1,12,9,"up") == true) speak(gp.npc[1][0]);
+            if (hit(0,27,16,"right") == true) {damagePit(gp.dialogueState);}
+            else if (hit(0,23,12,"up") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,10,39,"any") == true) {teleport(1,12,13,gp.indoor);} // to the merchant's house
+            else if (hit(1,12,13,"any") == true) {teleport(0,10,39,gp.outside);} // to outside
+            else if (hit(1,12,9,"up") == true) {speak(gp.npc[1][0]);}
+            else if (hit(0,12,9,"any") == true) {teleport(2,9,41,gp.dungeon);} // to the dungeon
+            else if (hit(2,9,41,"any") == true) {teleport(0,12,9,gp.outside);} // to outside
+            else if (hit(2,8,7,"any") == true) {teleport(3,26,41,gp.dungeon);} // to B2
+            else if (hit(3,26,41,"any") == true) {teleport(2,8,7,gp.dungeon);} // to B1
         }
     }
 
@@ -121,16 +122,12 @@ public class EventHandler{
         }
     }
 
-    public void teleport(int map, int col, int row) {
+    public void teleport(int map, int col, int row, int area) {
         gp.gameState = gp.transitionState;
+        gp.nextArea = area;
         tempMap = map;
         tempCol = col;
         tempRow = row;
-        // gp.currentMap = map;
-        // gp.player.worldX = gp.tileSize * col;
-        // gp.player.worldY = gp.tileSize * row;
-        // previousEventX = gp.player.worldX;
-        // previousEventY = gp.player.worldY;
         canTouchEvent = false;
         gp.playSE(13);
     }

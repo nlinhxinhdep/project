@@ -810,21 +810,22 @@ public class UI {
 
     public void drawTransition() {
 
-    counter++;
+        counter++;
 
-    g2.setColor(new Color(0, 0, 0, counter * 5));
-    g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setColor(new Color(0, 0, 0, counter * 5));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
-    if (counter == 50) {
-        counter = 0;
-        gp.gameState = gp.playState;
-        gp.currentMap = gp.eHandler.tempMap;
-        gp.player.worldX = gp.tileSize * gp.eHandler.tempCol;
-        gp.player.worldY = gp.tileSize * gp.eHandler.tempRow;
-        gp.eHandler.previousEventX = gp.player.worldX;
-        gp.eHandler.previousEventY = gp.player.worldY;
+        if (counter == 50) {
+            counter = 0;
+            gp.gameState = gp.playState;
+            gp.currentMap = gp.eHandler.tempMap;
+            gp.player.worldX = gp.tileSize * gp.eHandler.tempCol;
+            gp.player.worldY = gp.tileSize * gp.eHandler.tempRow;
+            gp.eHandler.previousEventX = gp.player.worldX;
+            gp.eHandler.previousEventY = gp.player.worldY;
+            gp.changeArea();
+        }
     }
-}
 
     public void drawTradeScreen() {
         switch (subState) {

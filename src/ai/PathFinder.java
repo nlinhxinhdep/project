@@ -2,8 +2,6 @@ package ai;
 import java.util.ArrayList;
 import main.GamePanel;
 
-
-
 public class PathFinder {
     GamePanel gp;
     Node [][] node;

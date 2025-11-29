@@ -56,7 +56,7 @@ public class Player extends Entity {
         // worldY = gp.tileSize * 12;
         // gp.currentMap = 1;
 
-        defaultSpeed = 6;
+        defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
 
@@ -84,12 +84,17 @@ public class Player extends Entity {
         getAttackImage();
         getGuardImage();
         setItems();
+        setDialogue();
     }
 
     public void setDefaultPositions() {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         direction = "down";
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "You are level " + level + " now!\n +" + "You feel stronger";
     }
     public void restoreStatus() {
         life = maxLife;
@@ -160,7 +165,6 @@ public class Player extends Entity {
         right1 = image;
         right2 = image;
     }
-
     public void getAttackImage() {
         if(currentWeapon.type == type_sword){
             int w = gp.tileSize;
@@ -415,7 +419,7 @@ public class Player extends Entity {
             else if (gp.obj[gp.currentMap][i].type == type_obstacle) {
                 if(keyH.enterPressed == true) {
                     attackCanceled = true;
-                    gp.obj[gp.currentMap][i].interact(this);
+                    gp.obj[gp.currentMap][i].interact();
                 }
             }
             // Inventory items
@@ -438,7 +442,7 @@ public class Player extends Entity {
     public void interactNPC(int i) {
     	if(gp.keyH.enterPressed == true){
     		if (i != 999) {      
-                attackCanceled = true;  	          
+                attackCanceled = true;	          
                 gp.npc[gp.currentMap][i].speak();           	
     		}      
     	}  
@@ -531,7 +535,7 @@ public class Player extends Entity {
             defense = getDefense();
             gp.playSE(8);
             gp.gameState = gp.dialogueState;
-            gp.ui.currentDialogue = "You are level " + level + " now!\n";
+            startDialogue(this, 0);
         }
     }
     
@@ -566,8 +570,7 @@ public class Player extends Entity {
             }
 
             if (selectedItem.type == type_consumable) {
-                if(selectedItem.use(this))
-                {
+                if(selectedItem.use(this)){
                     if(selectedItem.amount > 1) {
                     selectedItem.amount--;
                     } else {

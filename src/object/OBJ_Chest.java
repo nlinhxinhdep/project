@@ -27,29 +27,29 @@ public class OBJ_Chest extends Entity {
     }
     public void setLoot (Entity loot) {
         this.loot = loot;
+        setDialogue();
     }
-    public void interact(Entity entity) {
+    public void setDialogue() {
+        dialogues[0][0] = "You open the chest and find a " + loot.name + "!\n...But you cannot carry any more!";
+        dialogues[1][0] = "You open the chest and find a " + loot.name + "!\nYou obtain the " + loot.name + "!";
+        dialogues[2][0] = "It's empty.";
+    }
+    public void interact() {
 
-        gp.gameState = gp.dialogueState;
-
-        if (opened == false) {
+        if(opened == false) {
             gp.playSE(3);
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("You open the chest and find a " + loot.name + "!");
-
-            if (gp.player.inventory.size() == gp.player.maxInventorySize) {
-                sb.append("\nBut you cannot carry any more!");
-            } else {
-                sb.append("\nYou obtain the " + loot.name + "!");
-                gp.player.inventory.add(loot);
+            if(gp.player.canObtainItem(loot) == false) {
+                startDialogue(this, 0);
+            }
+            else {
+                startDialogue(this, 1);
                 down1 = image2;
                 opened = true;
             }
-            gp.ui.currentDialogue = sb.toString();
-
-        } else {
-            gp.ui.currentDialogue = "It's empty";
+        }
+        else {
+            startDialogue(this, 2);
         }
     }
 }

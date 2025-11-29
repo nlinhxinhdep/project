@@ -4,9 +4,7 @@ import entity.Entity;
 import main.GamePanel;
 
 public class OBJ_Door extends Entity {
-
     GamePanel gp;
-
     public OBJ_Door(GamePanel gp) {
         super(gp);
         this.gp=gp;
@@ -21,10 +19,16 @@ public class OBJ_Door extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+        setDialogue();
     }
 
-    public void interact(Entity entity) {
-        gp.gameState = gp.dialogueState;
-        gp.ui.currentDialogue = "You need a key to open this.";
+
+    public void setDialogue() {
+
+        dialogues[0][0] = "You need a key to open this.";
+    }
+    public void interact() {
+
+        startDialogue(this, 0);
     }
 }

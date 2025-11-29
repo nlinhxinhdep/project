@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
 
-public abstract class Entity {
+public class Entity {
 	GamePanel gp;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
@@ -154,8 +154,8 @@ public abstract class Entity {
     }
     public void resetCounter(){
 
-         spriteCounter = 0;
-         actionLockCounter = 0;
+        spriteCounter = 0;
+        actionLockCounter = 0;
         invincibleCounter = 0;
         shotAvailableCounter = 0;
         dyingCounter = 0;
@@ -169,6 +169,8 @@ public abstract class Entity {
         int goalRow = (target.worldY + target.solidArea.y)/gp.tileSize;
         return goalRow;
     }
+
+    
     public void setAction() {}
 
     public void setLoot (Entity loot) {}
@@ -196,8 +198,8 @@ public abstract class Entity {
     }
 
     public boolean use(Entity entity){return false;}
-    public void interact(Entity entity){}
-    public void checkDrop() {}
+    public void interact(){}
+    public void checkDrop(){}
 
     public void dropItem(Entity droppedItem) {
         for(int i = 0; i < gp.obj[1].length; i++) {
@@ -253,7 +255,6 @@ public abstract class Entity {
         
         if(this.type == type_monster && contactPlayer == true) {
             damagePlayer(attack);
-        	
         }
     }
 
@@ -782,8 +783,8 @@ public abstract class Entity {
             }
         }
 
-        user.solidArea.x = user.solidAreaDefaultX;
-        user.solidArea.y = user.solidAreaDefaultY;
+        // user.solidArea.x = user.solidAreaDefaultX;
+        // user.solidArea.y = user.solidAreaDefaultY;
         return index;
     }
 }

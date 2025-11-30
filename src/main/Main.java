@@ -29,5 +29,3 @@ public class Main {
         gamePanel.startGameThread();                          // Bắt đầu vòng lặp game (cập nhật + vẽ liên tục)
     }
 }
-
-

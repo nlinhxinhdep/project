@@ -6,7 +6,9 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 	GamePanel gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
-    
+    public boolean showDebugText = false;
+    public boolean godModeOn = false;
+
     public KeyHandler(GamePanel gp){
     	this.gp = gp;	
     }
@@ -117,21 +119,34 @@ public class KeyHandler implements KeyListener {
             spacePressed = true;
         }
         // DEBUG
-        // if (code == KeyEvent.VK_T) {
-        //     if (showDebugText == false) {
-        //         showDebugText = true;
-        //     } else if (showDebugText == true) {
-        //         showDebugText = false;
-        //     }
-        // }
-        if (code == KeyEvent.VK_R) {
-            switch (gp.currentMap) {
-                case 0:
-                    gp.tileM.loadMap("/maps/worldV3.txt", 0);
-                    break;
-                case 1:
-                    gp.tileM.loadMap("/maps/hehe.txt", 1);
-                    break;
+        if(code == KeyEvent.VK_T)   //Debug Menu
+        {
+            if(showDebugText == false)
+            {
+                showDebugText = true;
+            }
+            else if(showDebugText == true)
+            {
+                showDebugText = false;
+            }
+        }
+        if(code == KeyEvent.VK_R)   //Refresh Map without restarting game // Save Map File : in IntellijIDE "Ctrl + F9", in Eclipce "Ctrl + S"
+        {
+            switch (gp.currentMap)
+            {
+                case 0: gp.tileM.loadMap("/maps/worldV3.txt",0); break;
+                case 1: gp.tileM.loadMap("/maps/interior01.txt",1); break;
+            }
+        }
+        if(code == KeyEvent.VK_G)   //Debug Menu
+        {
+            if(godModeOn == false)
+            {
+                godModeOn = true;
+            }
+            else if(godModeOn == true)
+            {
+                godModeOn = false;
             }
         }
 

@@ -1,26 +1,20 @@
 package main;
-
-import javax.swing.JPanel;
-
 import ai.PathFinder;
 import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
+import tile.Map;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import javax.swing.JPanel;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.awt.Color;
-import tile.Map;
+
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGSX
@@ -128,6 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void resetGame (boolean restart) {
         
+        currentArea = outside;
         player.setDefaultPositions();
         player.restoreStatus();
         player.resetCounter();
@@ -233,6 +228,11 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void drawToTempScreen() {
                
+        long drawStart = 0;
+        if(keyH.showDebugText == true)
+        {
+            drawStart = System.nanoTime();
+        }
         // TITLE SCREEN
         if(gameState == titleState) {
         	ui.draw(g2);
@@ -302,7 +302,35 @@ public class GamePanel extends JPanel implements Runnable {
 
             //UI
             ui.draw(g2);
-             	
+            
+            //DEBUG
+
+            if(keyH.showDebugText == true)
+            {
+                long drawEnd = System.nanoTime();
+                long passed = drawEnd - drawStart;
+
+                g2.setFont(new Font("Arial", Font.PLAIN,20));
+                g2.setColor(Color.white);
+                int x = 10;
+                int y = 400;
+                int lineHeight = 20;
+
+                g2.drawString("WorldX " + player.worldX,x,y);
+                y+= lineHeight;
+                g2.drawString("WorldY " + player.worldY,x,y);
+                y+= lineHeight;
+                g2.drawString("Col " + (player.worldX + player.solidArea.x) / tileSize,x,y);
+                y+= lineHeight;
+                g2.drawString("Row " + (player.worldY + player.solidArea.y) / tileSize,x,y);
+                y+= lineHeight;
+                g2.drawString("Map " + currentMap,x,y);
+                y+= lineHeight;
+                g2.drawString("Draw time: " + passed,x,y);
+                y+= lineHeight;
+                g2.drawString("God Mode: " + keyH.godModeOn, x, y);
+
+            }
         }
     }
     

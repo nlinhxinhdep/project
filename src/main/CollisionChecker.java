@@ -67,41 +67,63 @@ public class CollisionChecker {
         }
     }
     
-    public int checkObject(Entity entity, boolean player) {
+    public int checkObject(Entity entity, boolean player)
+    {
         int index = 999;
-        for (int i = 0; i < gp.obj[1].length; i++) {
-            if (gp.obj[gp.currentMap][i] != null) {
-                // GET ENTITY'S SOLID AREA POSITION
+
+        //Use a temporal direction when it's being knockbacked
+        String direction = entity.direction;
+        if(entity.knockBack == true)
+        {
+            direction = entity.knockBackDirection;
+        }
+
+        for(int i = 0;i < gp.obj[1].length; i++)
+        {
+            if(gp.obj[gp.currentMap][i] != null)
+            {
+                // get entity's solid area position
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
-                // GET THE OBJECT'S SOLID AREA POSITION
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
+
+                // get the object's solid area position
+                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;       //entity's solid area and obj's solid area is different.
                 gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
-                // CHECK FOR COLLISION BASED ON DIRECTION
-                switch (entity.direction) {
-                    case "up": entity.solidArea.y -= entity.speed; break;
-                    case "down":entity.solidArea.y += entity.speed;break;
-                    case "left":entity.solidArea.x -= entity.speed;break;
-                    case "right": entity.solidArea.x += entity.speed; break;
+
+                switch (direction)
+                {
+                    case "up" :
+                        entity.solidArea.y -= entity.speed;
+                        break;
+                    case "down" :
+                        entity.solidArea.y += entity.speed;
+                        break;
+                    case "left" :
+                        entity.solidArea.x -= entity.speed;
+                        break;
+                    case "right" :
+                        entity.solidArea.x += entity.speed;
+                        break;
                 }
-                if (entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)) {
-                    if (gp.obj[gp.currentMap][i].collision == true) {
+                if(entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)) //Checking if Entity rectangle and Object rectangle intersects.
+                {
+                    if(gp.obj[gp.currentMap][i].collision == true) //Collision (Player can't enter through a door.)
+                    {
                         entity.collisionOn = true;
                     }
-                    if (player == true) {
-                        index = i;
+                    if(player == true) // Checking this because no one can receive items except the player.
+                    {
+                        index = i;   // Non-player characters cannot pickup objects.
                     }
                 }
-
-                // RESET SOLID AREA POSITION
-                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.x = entity.solidAreaDefaultX; // Reset
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].solidAreaDefaultX;
+
+                gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].solidAreaDefaultX;     // Reset
                 gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].solidAreaDefaultY;
             }
         }
-
-        return index;
+         return index;
     }
     // check entity collision
     public int checkEntity(Entity entity, Entity[][] target) {

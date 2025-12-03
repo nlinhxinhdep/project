@@ -48,6 +48,7 @@ public class Entity {
     public boolean offBalance = false;
 	public Entity loot;
     public boolean opened = false;
+    public boolean inRage = false;
 	// COUNTER
 	public int spriteCounter = 0;
 	public int actionLockCounter = 0;
@@ -136,13 +137,24 @@ public class Entity {
     public int getRow() {
         return getTopY() / gp.tileSize;
     }
-    public int getXdistance (Entity target) {
-        int xDistance = Math.abs(worldX - target.worldX);
+    public int getCenterX()
+    {
+        int centerX = worldX + left1.getWidth()/2;
+        return centerX;
+    }
+    public int getCenterY()
+    {
+        int centerY = worldY + up1.getHeight()/2;
+        return centerY;
+    }
+    public int getXdistance(Entity target)
+    {
+        int xDistance = Math.abs(getCenterX() - target.getCenterX());
         return xDistance;
     }
-
-    public int getYdistance (Entity target) {
-        int yDistance = Math.abs(worldY - target.worldY);
+    public int getYdistance(Entity target)
+    {
+        int yDistance = Math.abs(getCenterY() - target.getCenterY());
         return yDistance;
     }
 
@@ -333,44 +345,54 @@ public class Entity {
             }
         }
     }
-    public void checkAttackOrNot (int rate, int straight, int horizontal) {
-
-        boolean targetInRange = false;
+    public void checkAttackOrNot(int rate, int straight, int horizontal)
+    {
+        boolean tartgetInRange = false;
         int xDis = getXdistance(gp.player);
         int yDis = getYdistance(gp.player);
 
-        switch (direction) {
+        switch (direction)
+        {
             case "up":
-                if (gp.player.worldY < worldY && yDis < straight && xDis < horizontal) {
-                    targetInRange = true;
+                if(gp.player.getCenterY() < getCenterY()  && yDis < straight && xDis < horizontal)
+                {
+                    tartgetInRange = true;
                 }
                 break;
             case "down":
-                if (gp.player.worldY > worldY && yDis < straight && xDis < horizontal) {
-                    targetInRange = true;
+                if(gp.player.getCenterY() > getCenterY()  && yDis < straight && xDis < horizontal)
+                {
+                    tartgetInRange = true;
                 }
                 break;
             case "left":
-                if (gp.player.worldX < worldX && xDis < straight && yDis < horizontal) {
-                    targetInRange = true;
+                if(gp.player.getCenterX() < getCenterX() && xDis < straight && yDis < horizontal)
+                {
+                    tartgetInRange = true;
                 }
                 break;
             case "right":
-                if (gp.player.worldX > worldX && xDis < straight && yDis < horizontal) {
-                    targetInRange = true;
+                if(gp.player.getCenterX() > getCenterX() && xDis < straight && yDis < horizontal)
+                {
+                    tartgetInRange = true;
                 }
                 break;
         }
-            if (targetInRange == true) {
-                int i = new Random().nextInt(rate);
-                if (i == 0) {
-                    attacking = true;
-                    spriteNum = 1;
-                    spriteCounter = 0;
-                    shotAvailableCounter = 0;
-                }
-            }   
+
+        if(tartgetInRange == true)
+        {
+            //Check if it initiates an attack
+            int i = new Random().nextInt(rate);
+            if(i == 0)
+            {
+                attacking = true;
+                spriteNum = 1;
+                spriteCounter = 0;
+                shotAvailableCounter = 0;
+            }
+        }
     }
+
     public void checkShootOrNot (int rate, int shotInterval) {
 
         int i = new Random().nextInt(rate);
@@ -406,21 +428,52 @@ public class Entity {
             }
         }
     }
-    public void getRandomDirection() {
+    public void getRandomDirection(int interval) {
 
         actionLockCounter ++;
 
-        if (actionLockCounter == 120) {
-
+        if (actionLockCounter == interval) {
             Random random = new Random();
             int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
             if (i % 4 == 0) {direction = "up"; }
                 if (i % 4 == 1) { direction = "down"; }
                 if (i % 4 == 2) {direction = "left";}
                 if (i % 4 == 3) {direction = "right";}
-                actionLockCounter = 0;	
-            } 	
+            actionLockCounter = 0;	
+        } 	
+    }
+
+    public void moveTowardPlayer(int interval)
+    {
+        actionLockCounter++;
+
+        if(actionLockCounter > interval)
+        {
+            if(getXdistance(gp.player) > getYdistance(gp.player)) //if entity far to the player on X axis moves right or left
+            {
+                if(gp.player.getCenterX() < getCenterX()) //Player is left side, entity moves to left
+                {
+                    direction = "left";
+                }
+                else
+                {
+                    direction = "right";
+                }
+            }
+            else if(getXdistance(gp.player) < getYdistance(gp.player))  //if entity far to the player on Y axis moves up or down
+            {
+                if(gp.player.getCenterY() < getCenterY()) //Player is up side, entity moves to up
+                {
+                    direction = "up";
+                }
+                else
+                {
+                    direction = "down";
+                }
+            }
+            actionLockCounter = 0;
         }
+    }
 
     public String getOppositeDirection (String direction) {
 
@@ -540,95 +593,129 @@ public class Entity {
         target.knockBack = true;
     }
 
-    public void draw(Graphics2D g2) {
-    	BufferedImage image = null;
+    public int getScreenX()
+    {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        return screenX;
+    }
+
+    public int getScreenY()
+    {
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        return screenY;
+    }
+
+    public boolean inCamera()
+    {
+        boolean inCamera = false;
+
+        int entityLeftWorldX = worldX;
+        int entityRightWorldX = worldX + left1.getWidth();
+        int entityTopWorldY = worldY;
+        int entityBottomWorldY = worldY + up1.getHeight();
+        int cameraLeftWorldX = gp.player.worldX - gp.player.screenX;
+        int cameraRightWorldX = gp.player.worldX + gp.player.screenX;
+        int cameraTopWorldY = gp.player.worldY - gp.player.screenY;
+        int cameraBottomWorldY = gp.player.worldY + gp.player.screenY;
+
+        if(entityRightWorldX > cameraLeftWorldX &&
+           entityLeftWorldX < cameraRightWorldX &&
+           entityBottomWorldY > cameraTopWorldY &&
+           entityTopWorldY < cameraBottomWorldY)
+        {
+            inCamera = true;
+        }
+
+        return inCamera;
+    }
+
+    public void draw(Graphics2D g2)
+    {
+        BufferedImage image= null;
+
 
         if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-            worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-            worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-            worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+        worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+        worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+        worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+            int tempScreenX = getScreenX();
+            int tempScreenY = getScreenY();
 
-        	int tempScreenX = screenX;
-            int tempScreenY = screenY;
-            int drawWidth = gp.tileSize;
-            int drawHeight = gp.tileSize;
 
-        switch (direction) {
-            case "up":
-                if (attacking) {
-                    tempScreenY = screenY - gp.tileSize; // vung kiáº¿m lÃªn trÃªn
-                    drawHeight = gp.tileSize * 2;
-                    if (spriteNum == 1) image = attackUp1;
-                    if (spriteNum == 2) image = attackUp2;
-                } else {
-                    if (spriteNum == 1) image = up1;
-                    if (spriteNum == 2) image = up2;
-                }
-                break;
+            switch (direction)
+            {
+                case "up" :
+                    if(attacking == false) //Normal walking sprites
+                    {
+                        if(spriteNum == 1){image = up1;}
+                        if(spriteNum == 2) {image = up2;}
+                    }
+                    if(attacking == true)  //Attacking sprites
+                    {
+                        tempScreenY = getScreenY() - up1.getHeight();    //Adjusted the player's position one tile to up. Explained why I did it at where I call attacking() in update().
+                        if(spriteNum == 1) {image = attackUp1;}
+                        if(spriteNum == 2) {image = attackUp2;}
+                    }
+                    break;
 
-            case "down":
-                if (attacking) {
-                    drawHeight = gp.tileSize * 2;
-                    if (spriteNum == 1) image = attackDown1;
-                    if (spriteNum == 2) image = attackDown2;
-                } else {
-                    if (spriteNum == 1) image = down1;
-                    if (spriteNum == 2) image = down2;
-                }
-                break;
+                case "down" :
+                    if(attacking == false) //Normal walking sprites
+                    {
+                        if(spriteNum == 1){image = down1;}
+                        if(spriteNum == 2){image = down2;}
+                    }
+                    if(attacking == true)  //Attacking sprites
+                    {
+                        if(spriteNum == 1){image = attackDown1;}
+                        if(spriteNum == 2){image = attackDown2;}
+                    }
+                    break;
 
-            case "left":
-                if (attacking) {
-                    tempScreenX = screenX - gp.tileSize; // vung kiáº¿m sang trÃ¡i
-                    drawWidth = gp.tileSize * 2;
-                    if (spriteNum == 1) image = attackLeft1;
-                    if (spriteNum == 2) image = attackLeft2;
-                } else {
-                    if (spriteNum == 1) image = left1;
-                    if (spriteNum == 2) image = left2;
-                }
-                break;
+                case "left" :
+                    if(attacking == false) //Normal walking sprites
+                    {
+                        if(spriteNum == 1) {image = left1;}
+                        if(spriteNum == 2) {image = left2;}
+                    }
+                    if(attacking == true)  //Attacking sprites
+                    {
+                        tempScreenX = getScreenX() - left1.getWidth();    //Adjusted the player's position one tile left. Explained why I did it at where I call attacking() in update().
+                        if(spriteNum == 1) {image = attackLeft1;}
+                        if(spriteNum == 2) {image = attackLeft2;}
+                    }
+                    break;
 
-            case "right":
-                if (attacking) {
-                    drawWidth = gp.tileSize * 2;
-                    if (spriteNum == 1) image = attackRight1;
-                    if (spriteNum == 2) image = attackRight2;
-                } else {
-                    if (spriteNum == 1) image = right1;
-                    if (spriteNum == 2) image = right2;
-                }
-                break;
-        }
-        	// Monster HP bar
-        	if (type == 2 && hpBarOn == true) {
-        	    double oneScale = (double)gp.tileSize/maxLife;
-        	    double hpBarValue = oneScale*life;
-
-        	    g2.setColor(new Color(35, 35, 35));
-        	    g2.fillRect(screenX-1, screenY-16, gp.tileSize+2, 12);
-
-        	    g2.setColor(new Color(255, 0, 30));
-        	    g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
-        	    
-        	    hpBarCounter++;
-        	    if(hpBarCounter > 600) {
-        	    	hpBarCounter = 0;
-        	    	hpBarOn = false;
-        	    }
-        	}
-        	if (invincible == true) {
-        		hpBarOn = true;
-        		hpBarCounter = 0;
-        		changeAlpha(g2, 0.4f);
+                case "right" :
+                    if(attacking == false) //Normal walking sprites
+                    {
+                        if(spriteNum == 1) {image = right1;}
+                        if(spriteNum == 2) {image = right2;}
+                    }
+                    if(attacking == true)  //Attacking sprites
+                    {
+                        if(spriteNum == 1) {image = attackRight1;}
+                        if(spriteNum == 2) {image = attackRight2;}
+                    }
+                    break;
             }
-        	if(dying == true) {
-        		dyingAnimation(g2);
-        	}
-	        g2.drawImage(image, tempScreenX, tempScreenY, drawWidth, drawHeight, null);
-	        changeAlpha(g2, 1f);
+
+            //Make entity half-transparent (%30) when invincible
+            if(invincible == true)
+            {
+                hpBarOn = true;    //when player attacks monster play hpBar
+                hpBarCounter = 0;  //reset monster aggro
+                changeAlpha(g2,0.4F);
+            }
+
+            if(dying == true)
+            {
+                dyingAnimation(g2);
+            }
+
+            g2.drawImage(image, tempScreenX, tempScreenY, null);
+
+            //Reset graphics opacity / alpha
+            changeAlpha(g2,1F);
         }
     }
     

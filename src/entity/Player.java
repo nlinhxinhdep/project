@@ -64,7 +64,7 @@ public class Player extends Entity {
         mana = maxMana;
         ammo = 10;
         level = 1;
-        strength = 1; 
+        strength = 5; 
         dexterity = 1; 
         maxLife = 6;
         life = maxLife;
@@ -88,6 +88,7 @@ public class Player extends Entity {
     }
 
     public void setDefaultPositions() {
+        gp.currentMap = 0;
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         direction = "down";
@@ -413,12 +414,16 @@ public class Player extends Entity {
         if(mana > maxMana) {
             mana = maxMana;
         }
-        if(life <= 0){
-            gp.gameState = gp.gameOverState;
-            gp.ui.commandNum = -1;
-            gp.stopMusic();
-            gp.playSE(12);
-        }
+        // if(keyH.godModeOn == false)
+        // {
+            if(life <= 0)
+            {
+                gp.gameState = gp.gameOverState;
+                gp.ui.commandNum =- 1; //for if you die while pressing enter
+                gp.stopMusic();
+                gp.playSE(12);
+            }
+        // }
     }
 
 

@@ -64,7 +64,7 @@ public class Player extends Entity {
         mana = maxMana;
         ammo = 10;
         level = 1;
-        strength = 5; 
+        strength = 1; 
         dexterity = 1; 
         maxLife = 6;
         life = maxLife;
@@ -414,8 +414,8 @@ public class Player extends Entity {
         if(mana > maxMana) {
             mana = maxMana;
         }
-        // if(keyH.godModeOn == false)
-        // {
+        if(keyH.godModeOn == false)
+        {
             if(life <= 0)
             {
                 gp.gameState = gp.gameOverState;
@@ -423,7 +423,7 @@ public class Player extends Entity {
                 gp.stopMusic();
                 gp.playSE(12);
             }
-        // }
+        }
     }
 
 

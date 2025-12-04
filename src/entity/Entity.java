@@ -55,7 +55,7 @@ public class Entity {
 	public int invincibleCounter = 0;
     public int shotAvailableCounter = 0;
 	int dyingCounter = 0;
-	int hpBarCounter = 0;
+	public int hpBarCounter = 0;
     int knockBackCounter = 0;
     public int guardCounter = 0;
     int offBalanceCounter = 0;
@@ -83,6 +83,7 @@ public class Entity {
     public Entity currentShield;
     public Entity currentLight;
     public Projectile projectile;
+    public boolean  boss;
 
     //Item Attributes
     public ArrayList<Entity> inventory = new ArrayList<>();
@@ -605,27 +606,39 @@ public class Entity {
         return screenY;
     }
 
-    public boolean inCamera()
-    {
+    // public boolean inCamera()
+    // {
+    //     boolean inCamera = false;
+
+    //     int entityLeftWorldX = worldX;
+    //     int entityRightWorldX = worldX + left1.getWidth();
+    //     int entityTopWorldY = worldY;
+    //     int entityBottomWorldY = worldY + up1.getHeight();
+    //     int cameraLeftWorldX = gp.player.worldX - gp.player.screenX;
+    //     int cameraRightWorldX = gp.player.worldX + gp.player.screenX;
+    //     int cameraTopWorldY = gp.player.worldY - gp.player.screenY;
+    //     int cameraBottomWorldY = gp.player.worldY + gp.player.screenY;
+
+    //     if(entityRightWorldX > cameraLeftWorldX &&
+    //        entityLeftWorldX < cameraRightWorldX &&
+    //        entityBottomWorldY > cameraTopWorldY &&
+    //        entityTopWorldY < cameraBottomWorldY)
+    //     {
+    //         inCamera = true;
+    //     }
+
+    //     return inCamera;
+    // }
+
+    public boolean inCamera() {
         boolean inCamera = false;
 
-        int entityLeftWorldX = worldX;
-        int entityRightWorldX = worldX + left1.getWidth();
-        int entityTopWorldY = worldY;
-        int entityBottomWorldY = worldY + up1.getHeight();
-        int cameraLeftWorldX = gp.player.worldX - gp.player.screenX;
-        int cameraRightWorldX = gp.player.worldX + gp.player.screenX;
-        int cameraTopWorldY = gp.player.worldY - gp.player.screenY;
-        int cameraBottomWorldY = gp.player.worldY + gp.player.screenY;
-
-        if(entityRightWorldX > cameraLeftWorldX &&
-           entityLeftWorldX < cameraRightWorldX &&
-           entityBottomWorldY > cameraTopWorldY &&
-           entityTopWorldY < cameraBottomWorldY)
-        {
+        if (worldX + gp.tileSize*5 > gp.player.worldX - gp.player.screenX &&
+            worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+            worldY + gp.tileSize*5 > gp.player.worldY - gp.player.screenY &&
+            worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
             inCamera = true;
         }
-
         return inCamera;
     }
 
@@ -634,10 +647,7 @@ public class Entity {
         BufferedImage image= null;
 
 
-        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-        worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-        worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-        worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+        if (inCamera() == true) {
             int tempScreenX = getScreenX();
             int tempScreenY = getScreenY();
 
@@ -697,24 +707,6 @@ public class Entity {
                         if(spriteNum == 2) {image = attackRight2;}
                     }
                     break;
-            }
-
-            // Monster HP bar
-            if (type == 2 && hpBarOn == true) {
-                double oneScale = (double)gp.tileSize / maxLife;
-                double hpBarValue = oneScale * life;
-
-                g2.setColor(new Color(35, 35, 35));
-                g2.fillRect(tempScreenX, tempScreenY - 16, gp.tileSize + 2, 12);
-
-                g2.setColor(new Color(255, 0, 30));
-                g2.fillRect(tempScreenX, tempScreenY - 15, (int)hpBarValue, 10);
-
-                hpBarCounter++;
-                if (hpBarCounter > 600) {
-                    hpBarCounter = 0;
-                    hpBarOn = false;
-                }
             }
 
             //Make entity half-transparent (%30) when invincible

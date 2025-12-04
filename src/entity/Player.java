@@ -47,14 +47,14 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        // //Vi tri map chính
+        // // //Vi tri map chính
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         
-        // Chỉnh sanh map 1
-        // worldX = gp.tileSize * 12;
-        // worldY = gp.tileSize * 12;
-        // gp.currentMap = 1;
+        // // Chỉnh sanh map 
+        // worldX = gp.tileSize * 16;
+        // worldY = gp.tileSize * 23;
+        // gp.currentMap = 3;
 
         defaultSpeed = 4;
         speed = defaultSpeed;
@@ -64,7 +64,7 @@ public class Player extends Entity {
         mana = maxMana;
         ammo = 10;
         level = 1;
-        strength = 1; 
+        strength = 10; 
         dexterity = 1; 
         maxLife = 6;
         life = maxLife;

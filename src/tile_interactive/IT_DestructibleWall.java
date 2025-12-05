@@ -34,7 +34,7 @@ public class IT_DestructibleWall extends InteractiveTile{
         return isCorrrectItem;
     }
     public void playSE() {
-        gp.playSE(19);
+        gp.playSE(20);
     }
 
     public InteractiveTile getDestroyedForm() {

@@ -429,7 +429,7 @@ public class UI {
 
             char characters[] = npc.dialogues[npc.dialogueSet][npc.dialogueIndex].toCharArray();
             if(charIndex < characters.length){
-                gp.playSE(16);
+                gp.playSE(17);
                 String s = String.valueOf(characters[charIndex]);
                 combinedText += s;
                 currentDialogue = combinedText;
@@ -440,8 +440,8 @@ public class UI {
 
                 charIndex = 0;
                 combinedText = "";
-                npc.dialogueIndex++;
-                if (gp.gameState == gp.dialogueState) {
+                //npc.dialogueIndex++;
+                if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState) {
                     npc.dialogueIndex++;
                     gp.keyH.enterPressed = false;
                 }
@@ -451,6 +451,9 @@ public class UI {
             npc.dialogueIndex = 0;
             if (gp.gameState == gp.dialogueState) {
                 gp.gameState = gp.playState;
+            }
+            if (gp.gameState == gp.cutsceneState) {
+                gp.csManager.scenePhase++;
             }
         }
 

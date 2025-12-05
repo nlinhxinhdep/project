@@ -28,7 +28,7 @@ public class KeyHandler implements KeyListener {
         else if(gp.gameState == gp.pauseState) {
             pauseState(code);
         }   
-        else if(gp.gameState == gp.dialogueState) {
+        else if(gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState) {
         	dialogueState(code);
         }
         else if(gp.gameState == gp.characterState) {
@@ -119,6 +119,7 @@ public class KeyHandler implements KeyListener {
             spacePressed = true;
         }
         // DEBUG
+        /*
         if(code == KeyEvent.VK_T)   //Debug Menu
         {
             if(showDebugText == false)
@@ -149,6 +150,7 @@ public class KeyHandler implements KeyListener {
                 godModeOn = false;
             }
         }
+        */
 
     }
     public void pauseState(int code) {

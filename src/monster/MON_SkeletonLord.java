@@ -9,6 +9,8 @@ import object.OBJ_ManaCrystal;
 
 import java.util.Random;
 
+import data.Progress;
+
 public class MON_SkeletonLord extends Entity {
     GamePanel gp; // cuz of different package
     public static final String monName = "Skeleton Lord";
@@ -28,6 +30,7 @@ public class MON_SkeletonLord extends Entity {
         defense = 3;
         exp = 40;
         knockBackPower = 5;
+        sleep = true;
 
         int size = gp.tileSize * 5;
         solidArea.x = 48;
@@ -141,6 +144,9 @@ public class MON_SkeletonLord extends Entity {
     }
     public void checkDrop()
     {
+        gp.bossBattleOn = false;
+        Progress.skeletonLordDefeated = 1;
+
         //Restore the previous music
         gp.stopMusic();
         gp.playMusic(19);

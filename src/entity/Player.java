@@ -47,7 +47,7 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        // // //Vi tri map chính
+        // Vi tri map chính
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         
@@ -65,7 +65,7 @@ public class Player extends Entity {
         ammo = 10;
         level = 1;
         strength = 10; 
-        dexterity = 1; 
+        dexterity = 100;
         maxLife = 6;
         life = maxLife;
         exp = 0;
@@ -717,7 +717,9 @@ public class Player extends Entity {
         if (transparent) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         }
-        g2.drawImage(image, tempScreenX, tempScreenY, drawWidth, drawHeight, null);
+        if(drawing == true){
+            g2.drawImage(image, tempScreenX, tempScreenY, drawWidth, drawHeight, null);
+        }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 }

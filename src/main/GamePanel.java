@@ -126,7 +126,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void resetGame (boolean restart) {
-
         stopMusic();
         currentArea = outside;
         removeTempEnity();

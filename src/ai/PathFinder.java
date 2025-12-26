@@ -8,10 +8,9 @@ public class PathFinder {
     ArrayList<Node> openList = new ArrayList <>();
     public ArrayList <Node> pathList = new ArrayList <>();
     Node startNode, goalNode, currentNode;
-    boolean goalReached = false;
+    boolean goalReached = false; 
     int step = 0;
-    public PathFinder (GamePanel gp)
-    {
+    public PathFinder (GamePanel gp){
         this.gp = gp;
         instantiateNodes();
     }

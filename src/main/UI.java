@@ -1082,13 +1082,18 @@ public class UI {
                     subState = 0;
                     npc.startDialogue(npc, 4);
                 } else {
+                    // 1. Tính giá tiền TRƯỚC khi xóa vật phẩm
+                    int price = gp.player.inventory.get(itemIndex).price / 2;
+                    
+                    // 2. Cộng tiền vào ví ngay
+                    gp.player.coin += price;
+
+                    // 3. Sau đó mới xử lý trừ số lượng hoặc xóa
                     if(gp.player.inventory.get(itemIndex).amount > 1) {
                         gp.player.inventory.get(itemIndex).amount--;
                     } else {
                         gp.player.inventory.remove(itemIndex);
                     }
-                    gp.player.coin += (gp.player.inventory.get(itemIndex).price / 2);
-                    // gp.player.inventory.remove(itemIndex);
                 }
             } else {
                 // slot trống -> bỏ qua

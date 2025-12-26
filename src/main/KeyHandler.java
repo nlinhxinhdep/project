@@ -55,12 +55,14 @@ public class KeyHandler implements KeyListener {
             if(gp.ui.commandNum < 0) {
                 gp.ui.commandNum = 2;
             }
+            gp.playSE(9);
         }
         if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
             gp.ui.commandNum++;
             if(gp.ui.commandNum > 2) {
                 gp.ui.commandNum = 0;
             }
+            gp.playSE(9);
         }
         if(code == KeyEvent.VK_ENTER) {
             if(gp.ui.commandNum == 0) {

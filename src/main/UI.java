@@ -59,11 +59,11 @@ public class UI {
 
         try {
             // Dấu "/" đại diện cho thư mục gốc của res/
-            InputStream ass = getClass().getResourceAsStream("/menu.jpg");
+            InputStream ass = getClass().getResourceAsStream("/menu.png");
             if (ass != null) {
                 titleImage = ImageIO.read(ass);
             } else {
-                System.out.println("Lỗi: Không tìm thấy file /menu.jpg trong thư mục res!");
+                System.out.println("Lỗi: Không tìm thấy file /menu.png trong thư mục res!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -399,27 +399,35 @@ public class UI {
         String text;
         int x;
         int y;
-
+        
+        // Thiết lập vị trí chung
+        // x = gp.tileSize * 2; // Cách lề trái 2 ô (Bạn có thể tăng giảm số này)
+        // y = gp.screenHeight - (gp.tileSize * 4); // Cách cạnh dưới 4 ô
+        
         // --- NÚT NEW GAME ---
         text = "NEW GAME";
-        x = getXforCenteredText(text);
-        y = gp.tileSize * 8; // Chỉnh số 8 này lên xuống để dời vị trí nút
+        x = gp.tileSize * 2;  // Căn trái: Cố định X = 2 ô
+        y = gp.screenHeight - (gp.tileSize * 3); // Căn dưới: Tính từ dưới lên
         
-        // Vẽ bóng chữ (màu đen) cho dễ đọc
+        // Vẽ bóng chữ (màu đen)
         g2.setColor(Color.black);
         g2.drawString(text, x + 5, y + 5);
         // Vẽ chữ chính (màu trắng)
         g2.setColor(Color.white);
         g2.drawString(text, x, y);
         
-        // Vẽ con trỏ chọn >
+        // Vẽ con trỏ chọn: > NEW GAME <
         if (commandNum == 0) {
-            g2.drawString(">", x - gp.tileSize, y);
+            // Mũi tên trái
+            g2.drawString(">", x - gp.tileSize, y); 
+            
+            // Mũi tên phải (Cần tính độ dài chữ để đặt đúng vị trí)
+            int textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            g2.drawString("<", x + textLength + 20, y); // +20 là khoảng cách
         }
 
         // --- NÚT LOAD GAME ---
         text = "LOAD GAME";
-        x = getXforCenteredText(text);
         y += gp.tileSize; // Xuống 1 dòng
         
         g2.setColor(Color.black);
@@ -429,11 +437,12 @@ public class UI {
         
         if (commandNum == 1) {
             g2.drawString(">", x - gp.tileSize, y);
+            int textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            g2.drawString("<", x + textLength + 20, y);
         }
 
         // --- NÚT QUIT ---
         text = "QUIT";
-        x = getXforCenteredText(text);
         y += gp.tileSize; // Xuống 1 dòng
         
         g2.setColor(Color.black);
@@ -443,6 +452,8 @@ public class UI {
         
         if (commandNum == 2) {
             g2.drawString(">", x - gp.tileSize, y);
+            int textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            g2.drawString("<", x + textLength + 20, y);
         }
     }
  

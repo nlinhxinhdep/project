@@ -47,8 +47,14 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
-            fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-            checkVolume();
+            if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+                checkVolume();
+            } else {
+                // Nếu không hỗ trợ chỉnh volume thì bỏ qua để game không bị crash
+                // Bạn có thể in ra console để debug nếu muốn
+                // System.out.println("Volume control not supported for sound ID: " + i);
+            }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }

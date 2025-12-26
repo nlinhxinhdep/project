@@ -12,6 +12,4 @@ public class OBJ_Shield_Wood extends entity.Entity {
         description = "[" + name + "]\nMade by wood";
         price = 100;
     }
-
-
 }

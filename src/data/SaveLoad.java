@@ -46,6 +46,34 @@ public class SaveLoad {
             ds.currentWeaponSlot = gp.player.getCurrentWeaponSlot();
             ds.currentShieldSlot = gp.player.getCurrentShieldSlot();
 
+            // --- THÊM MỚI: LƯU VỊ TRÍ PLAYER ---
+            ds.playerWorldX = gp.player.worldX;
+            ds.playerWorldY = gp.player.worldY;
+            ds.currentMap = gp.currentMap; // Lưu map hiện tại của người chơi
+
+            ds.mapMonsterNames = new String[gp.maxMap][gp.monster[1].length];
+            ds.mapMonsterWorldX = new int[gp.maxMap][gp.monster[1].length];
+            ds.mapMonsterWorldY = new int[gp.maxMap][gp.monster[1].length];
+            ds.mapMonsterLife = new int[gp.maxMap][gp.monster[1].length];
+            ds.mapMonsterAlive = new boolean[gp.maxMap][gp.monster[1].length];
+
+            for(int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
+                for(int i = 0; i < gp.monster[mapNum].length; i++) {
+                    // Nếu quái vật slot đó không tồn tại (đã chết và biến mất) hoặc đã chết (alive=false)
+                    if(gp.monster[mapNum][i] == null || gp.monster[mapNum][i].alive == false) {
+                        ds.mapMonsterNames[mapNum][i] = "NA"; // Đánh dấu là không có/đã chết
+                    } 
+                    else {
+                        // Lưu thông tin quái đang sống
+                        ds.mapMonsterNames[mapNum][i] = gp.monster[mapNum][i].name;
+                        ds.mapMonsterWorldX[mapNum][i] = gp.monster[mapNum][i].worldX;
+                        ds.mapMonsterWorldY[mapNum][i] = gp.monster[mapNum][i].worldY;
+                        ds.mapMonsterLife[mapNum][i] = gp.monster[mapNum][i].life;
+                        ds.mapMonsterAlive[mapNum][i] = true;
+                    }
+                }
+            }
+
             // OBJECTS ON MAP
             ds.mapObjectNames = new String[gp.maxMap][gp.obj[1].length];
             ds.mapObjectWorldX = new int[gp.maxMap][gp.obj[1].length];
@@ -108,12 +136,53 @@ public class SaveLoad {
             }   
 
             // PLAYER EQUIPMENT
-            gp.player.currentWeapon = gp.player.inventory.get(ds.currentWeaponSlot);
-            gp.player.currentShield = gp.player.inventory.get(ds.currentShieldSlot);
+            // Load Vũ khí
+            if(ds.currentWeaponSlot != 999 && ds.currentWeaponSlot < gp.player.inventory.size()) {
+                gp.player.currentWeapon = gp.player.inventory.get(ds.currentWeaponSlot);
+            } else {
+                gp.player.currentWeapon = null; // Nếu là 999 hoặc lỗi index thì không cầm gì
+            }
+
+            // Load Khiên
+            if(ds.currentShieldSlot != 999 && ds.currentShieldSlot < gp.player.inventory.size()) {
+                gp.player.currentShield = gp.player.inventory.get(ds.currentShieldSlot);
+            } else {
+                gp.player.currentShield = null;
+            }
 
             gp.player.getAttack();
             gp.player.getDefense();
             gp.player.getAttackImage();
+
+            gp.currentMap = ds.currentMap;
+            gp.player.worldX = ds.playerWorldX;
+            gp.player.worldY = ds.playerWorldY;
+
+            // LOAD MONSTERS
+            for(int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
+                for(int i = 0; i < gp.monster[mapNum].length; i++) {
+                    
+                    // Nếu trong file save ghi là "NA" -> Quái đã chết -> Xóa khỏi game
+                    if(ds.mapMonsterNames[mapNum][i].equals("NA")) {
+                        gp.monster[mapNum][i] = null;
+                    } 
+                    else {
+                        // Luôn luôn tạo mới quái vật từ tên trong file save để đảm bảo đúng loại (Red/Blue/Green)
+                        
+                        gp.monster[mapNum][i] = gp.eGenerator.getMonster(ds.mapMonsterNames[mapNum][i]);
+                        
+                        // Cập nhật thông số cho quái (vị trí, máu)
+                        if (gp.monster[mapNum][i] != null) {
+                            gp.monster[mapNum][i].worldX = ds.mapMonsterWorldX[mapNum][i];
+                            gp.monster[mapNum][i].worldY = ds.mapMonsterWorldY[mapNum][i];
+                            gp.monster[mapNum][i].life = ds.mapMonsterLife[mapNum][i];
+                            gp.monster[mapNum][i].alive = true;
+                            gp.monster[mapNum][i].dying = false;
+                            gp.monster[mapNum][i].invincible = false;
+                        }
+                    }
+                }
+            }
 
             // OBJECTS ON MAP
             for (int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
@@ -140,6 +209,7 @@ public class SaveLoad {
         } 
         catch (Exception e) {
             System.out.println("Load Exception!");
+            e.printStackTrace();
         }
     }
 }

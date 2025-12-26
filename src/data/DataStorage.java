@@ -24,6 +24,18 @@ public class DataStorage implements Serializable {
     int currentWeaponSlot;
     int currentShieldSlot;
 
+    // 1. PLAYER POSITION (Vị trí người chơi)
+    int playerWorldX;
+    int playerWorldY;
+    int currentMap;
+
+    // 2. MONSTER DATA (Dữ liệu quái vật)
+    String mapMonsterNames[][];
+    int mapMonsterWorldX[][];
+    int mapMonsterWorldY[][];
+    int mapMonsterLife[][];
+    boolean mapMonsterAlive[][]; // Kiểm tra quái còn sống hay chết
+
     // OBJECT ON MAP
     String mapObjectNames[][];
     int mapObjectWorldX[][];

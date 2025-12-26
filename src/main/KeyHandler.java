@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 public class KeyHandler implements KeyListener {
 	GamePanel gp;
@@ -67,9 +68,17 @@ public class KeyHandler implements KeyListener {
             	gp.playMusic(0);
             }
             if(gp.ui.commandNum == 1) {
-                gp.saveLoad.load();
-                gp.gameState = gp.playState;
-            	gp.playMusic(0);
+                File saveFile = new File("save.dat");
+                
+                if (saveFile.exists()) {
+                    gp.saveLoad.load();
+                    gp.gameState = gp.playState;
+                    gp.playMusic(0);
+                } else {
+                    // Nếu không có file save thì không làm gì cả (hoặc phát âm thanh lỗi)
+                    System.out.println("Chưa có file save để load!");
+                    // gp.playSE(số_âm_thanh_lỗi); // Nếu bạn muốn thêm tiếng kêu
+                }
             }
             if(gp.ui.commandNum == 2) {
                 System.exit(0);

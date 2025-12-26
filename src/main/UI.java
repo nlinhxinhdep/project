@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
@@ -21,7 +22,7 @@ public class UI {
     GamePanel gp;        // tham chiếu đến GamePanel để vẽ thông tin trò chơi
     public Font arial_40, arial_80B;       // font chữ để hiển thị thông tin
     Graphics2D g2;
-    Font maruMonica;
+    public Font maruMonica;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
     public boolean messageOn = false; // bật/tắt hiển thị thông báo tạm thời
     // public String message = "";       // nội dung thông báo
@@ -40,6 +41,7 @@ public class UI {
     public Entity npc;
     int charIndex = 0;
     String combinedText = "";
+    BufferedImage titleImage;
     
     
 
@@ -55,6 +57,17 @@ public class UI {
             e.printStackTrace();
         }
 
+        try {
+            // Dấu "/" đại diện cho thư mục gốc của res/
+            InputStream ass = getClass().getResourceAsStream("/menu.jpg");
+            if (ass != null) {
+                titleImage = ImageIO.read(ass);
+            } else {
+                System.out.println("Lỗi: Không tìm thấy file /menu.jpg trong thư mục res!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         arial_40 = new Font("Arial", Font.PLAIN, 40); // tạo font 40px
         arial_80B = new Font("Arial", Font.BOLD, 80);
@@ -283,9 +296,16 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
 
-        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY -28, null);
+        if (gp.player.currentWeapon != null) {
+            g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY -28, null);
+        }
+        
         textY += lineHeight;
-        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY -24, null);
+        
+        // Kiểm tra luôn khiên cho an toàn (dù mặc định có khiên gỗ)
+        if (gp.player.currentShield != null) {
+            g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY -24, null);
+        }
 
     }
     
@@ -360,52 +380,67 @@ public class UI {
     }
     
     public void drawTitleScreen() {
-        // Màu nền
-        g2.setColor(new Color(70, 120, 80));
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        
+        // 1. VẼ ẢNH NỀN
+        if (titleImage != null) {
+            // Vẽ ảnh tràn màn hình
+            g2.drawImage(titleImage, 0, 0, gp.screenWidth, gp.screenHeight, null);
+        } else {
+            // Nếu quên copy ảnh thì vẽ màn hình xanh như cũ để không bị lỗi đen xì
+            g2.setColor(new Color(70, 120, 80));
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        }
 
-        // TÊN GAME
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-        String text = "My 2D Adventure";
-        int x = getXforCenteredText(text);
-        int y = gp.tileSize * 3;
-
-        // Viền chữ
-        g2.setColor(Color.black);
-        g2.drawString(text, x + 5, y + 5);
-
-        // Chữ chính
-        g2.setColor(Color.white);
-        g2.drawString(text, x, y);
-
-        // VẼ NHÂN VẬT (logo hoặc hero đứng giữa màn hình)
-        x = gp.screenWidth / 2 - (gp.tileSize * 2) / 2;
-        y += gp.tileSize * 2;
-        g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
-
-        // MENU
+        // 2. VẼ MENU LỰA CHỌN (New Game, Quit...)
+        // Tùy vào ảnh của bạn, bạn có thể chỉnh màu chữ (Color.white hoặc black)
+        // và vị trí Y (gp.tileSize * 8) để nó nằm đúng chỗ trống trên ảnh.
+        
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        String text;
+        int x;
+        int y;
 
+        // --- NÚT NEW GAME ---
         text = "NEW GAME";
         x = getXforCenteredText(text);
-        y += gp.tileSize * 4;
+        y = gp.tileSize * 8; // Chỉnh số 8 này lên xuống để dời vị trí nút
+        
+        // Vẽ bóng chữ (màu đen) cho dễ đọc
+        g2.setColor(Color.black);
+        g2.drawString(text, x + 5, y + 5);
+        // Vẽ chữ chính (màu trắng)
+        g2.setColor(Color.white);
         g2.drawString(text, x, y);
+        
+        // Vẽ con trỏ chọn >
         if (commandNum == 0) {
             g2.drawString(">", x - gp.tileSize, y);
         }
 
+        // --- NÚT LOAD GAME ---
         text = "LOAD GAME";
         x = getXforCenteredText(text);
-        y += gp.tileSize;
+        y += gp.tileSize; // Xuống 1 dòng
+        
+        g2.setColor(Color.black);
+        g2.drawString(text, x + 5, y + 5);
+        g2.setColor(Color.white);
         g2.drawString(text, x, y);
+        
         if (commandNum == 1) {
             g2.drawString(">", x - gp.tileSize, y);
         }
 
+        // --- NÚT QUIT ---
         text = "QUIT";
         x = getXforCenteredText(text);
-        y += gp.tileSize;
+        y += gp.tileSize; // Xuống 1 dòng
+        
+        g2.setColor(Color.black);
+        g2.drawString(text, x + 5, y + 5);
+        g2.setColor(Color.white);
         g2.drawString(text, x, y);
+        
         if (commandNum == 2) {
             g2.drawString(">", x - gp.tileSize, y);
         }
@@ -977,18 +1012,21 @@ public class UI {
 
         // BUY AN ITEM
         if (gp.keyH.enterPressed == true) {
-            if (npc.inventory.get(itemIndex).price > gp.player.coin) {
-                subState = 0;
-                npc.startDialogue(npc, 2);
-                drawDialogueScreen();
-            } 
-            else {
-                if (gp.player.canObtainItem(npc.inventory.get(itemIndex)) == true) {
-                    gp.player.coin -= npc.inventory.get(itemIndex).price;
+            if (itemIndex < npc.inventory.size()) { //fix bug slot trống
+                
+                if (npc.inventory.get(itemIndex).price > gp.player.coin) {
+                    subState = 0;
+                    npc.startDialogue(npc, 2);
+                    // drawDialogueScreen(); // Có thể bỏ dòng này nếu không cần vẽ lại ngay lập tức
                 } 
                 else {
-                    subState = 0;
-                    npc.startDialogue(npc, 3);
+                    if (gp.player.canObtainItem(npc.inventory.get(itemIndex)) == true) {
+                        gp.player.coin -= npc.inventory.get(itemIndex).price;
+                    } 
+                    else {
+                        subState = 0;
+                        npc.startDialogue(npc, 3);
+                    }
                 }
             }
         }

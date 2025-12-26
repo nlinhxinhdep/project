@@ -47,15 +47,10 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        // Vi tri map chính
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
+        // ... (giữ nguyên phần tọa độ) ...
+        worldX = gp.tileSize * 12;
+        worldY = gp.tileSize * 10;
         
-        // // Chỉnh sanh map 
-        // worldX = gp.tileSize * 16;
-        // worldY = gp.tileSize * 23;
-        // gp.currentMap = 3;
-
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -64,24 +59,25 @@ public class Player extends Entity {
         mana = maxMana;
         ammo = 10;
         level = 1;
-        strength = 10; 
-        dexterity = 100;
+        strength = 5; 
+        dexterity = 10;
         maxLife = 6;
         life = maxLife;
         exp = 0;
         nextLevelExp = 5;
         coin = 300;
-//        currentWeapon = new OBJ_Sword_Normal(gp);
-        currentWeapon = new OBJ_Axe(gp);
-        currentShield = new OBJ_Shield_Wood(gp);
+
+        // --- THAY ĐỔI Ở ĐÂY ---
+        currentWeapon = null; // Ban đầu không có vũ khí
+        currentShield = null;
         currentLight = null;
         projectile = new OBJ_Fireball(gp);  
-        // projectile = new OBJ_Rock(gp);      
-        attack = getAttack(); // calculate attack value
-        defense = getDefense(); // calculate defense value  
+        
+        attack = getAttack(); // Tính toán lại attack (sẽ xử lý null bên dưới)
+        defense = getDefense(); 
 
         getImage();
-        getAttackImage();
+        getAttackImage(); // Sẽ xử lý null bên trong hàm này
         getGuardImage();
         setItems();
         setDialogue();
@@ -89,8 +85,8 @@ public class Player extends Entity {
 
     public void setDefaultPositions() {
         gp.currentMap = 0;
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
+        worldX = gp.tileSize * 12;
+        worldY = gp.tileSize * 10;
         direction = "down";
     }
 
@@ -111,23 +107,35 @@ public class Player extends Entity {
     }
     public void setItems() {
         inventory.clear();
-        inventory.add(currentWeapon);
-        inventory.add(currentShield);
+        
+        // --- THAY ĐỔI Ở ĐÂY ---
+        if (currentWeapon != null) {
+            inventory.add(currentWeapon);
+        }
+        if (currentShield != null) {
+            inventory.add(currentShield);
+        }
         inventory.add(new OBJ_Key(gp));
-        // inventory.add(new OBJ_Sword_Normal(gp));
     }
     public int getAttack() {
+        if (currentWeapon == null) {
+            return attack = strength; // Chỉ dùng sức mạnh cơ bản nếu không có vũ khí
+        }
+        // Nếu có vũ khí thì tính như bình thường
         attackArea = currentWeapon.attackArea;
         motion1_duration = currentWeapon.motion1_duration;
         motion2_duration = currentWeapon.motion2_duration;
-    	return attack = strength *currentWeapon.attackValue;
+        return attack = strength * currentWeapon.attackValue;
     }
 
     public int getDefense() {
+        if (currentShield == null) {
+            return defense = 0; // Không có khiên thì không có chỉ số phòng thủ từ trang bị
+        }
     	return defense = dexterity * currentShield.defenseValue;
     }
     public int getCurrentWeaponSlot () {
-        int currentWeaponSlot = 0;
+        int currentWeaponSlot = 999; // Mắc định không tìm thấy
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i) == currentWeapon) {
                 currentWeaponSlot = i;
@@ -136,7 +144,7 @@ public class Player extends Entity {
         return currentWeaponSlot;
     }
     public int getCurrentShieldSlot () {
-        int CurrentShieldSlot = 0;
+        int CurrentShieldSlot = 999;
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i) == currentShield) {
                 CurrentShieldSlot = i;
@@ -167,6 +175,9 @@ public class Player extends Entity {
         right2 = image;
     }
     public void getAttackImage() {
+        if (currentWeapon == null) {
+            return; // Không tải ảnh tấn công nếu không có vũ khí
+        }
         if(currentWeapon.type == type_sword){
             int w = gp.tileSize;
             int h = gp.tileSize;
@@ -251,10 +262,10 @@ public class Player extends Entity {
     	else if(attacking == true) {
     		attacking();
     	}
-        else if (keyH.spacePressed == true) {
-        guarding = true;
-        guardCounter ++;
-    }
+        else if (keyH.spacePressed == true && currentShield != null) {
+            guarding = true;
+            guardCounter++;
+        }
     	else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enterPressed) {
             int currentSpeed = speed;
             //CHECK DIAGONAL MOVEMENT
@@ -338,14 +349,13 @@ public class Player extends Entity {
             //CHECK EVENT teleport, trap, healing pool
             gp.eHandler.checkEvent();
 
-            if(keyH.enterPressed == true && attackCanceled == false) {
+            if(keyH.enterPressed == true && attackCanceled == false && currentWeapon != null) {
                 gp.playSE(7);
                 attacking = true;
                 spriteCounter = 0;
 
                 // DECREASE DURABILITY
                 currentWeapon.durability--;
-                
             }
 
             attackCanceled = false;

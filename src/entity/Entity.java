@@ -555,6 +555,7 @@ public class Entity {
 
             int damage = attack - gp.player.defense;
 
+
             // Get an opposite direction of this attacker
             String canGuardDirection = getOppositeDirection(direction);
 
@@ -587,6 +588,10 @@ public class Entity {
                 setKnockBack(gp.player,this,knockBackPower);
             }
             
+            if (damage < 0) {
+                damage = 0;
+            }
+
             gp.player.life -= damage;
             gp.player.invincible = true;
         }

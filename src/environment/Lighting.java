@@ -83,7 +83,7 @@ public class Lighting {
         if (dayState == day) {
             dayCounter++;
 
-            if (dayCounter > 600) { //change this value to speed up or slow down the day cycle
+            if (dayCounter > 6000) { //change this value to speed up or slow down the day cycle
                 dayState = dusk;
                 dayCounter = 0;
             }
@@ -142,7 +142,12 @@ public class Lighting {
                 break;
         }
         g2.setColor(Color.white);
-        g2.setFont(g2.getFont().deriveFont(50f));
+        if (gp.ui.maruMonica != null) {
+             g2.setFont(gp.ui.maruMonica.deriveFont(50f));
+        } else {
+             // Dự phòng nếu chưa load được font
+             g2.setFont(g2.getFont().deriveFont(50f));
+        }
         g2.drawString(situation, 800, 500);
     }
 }

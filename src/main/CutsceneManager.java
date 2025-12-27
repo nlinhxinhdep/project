@@ -127,6 +127,8 @@ public class CutsceneManager {
             // Boss battle music
             gp.stopMusic();
             gp.playMusic(22);
+
+            gp.resetTimer = true;
         }
     }
     public void scene_ending() {

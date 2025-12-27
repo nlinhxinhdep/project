@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     BufferedImage tempScreen;
     Graphics2D g2;
     public boolean fullScreenOn = false;
-    boolean resetTimer = false; //reset frame khi chuyển cảnh
+    public boolean resetTimer = false; //reset frame khi chuyển cảnh
     
 
     // FPS
@@ -395,8 +395,13 @@ public class GamePanel extends JPanel implements Runnable {
     	music.stop();
     }
     public void playSE(int i) {
-    	se.setFile(i);
-    	se.play();
+    	new Thread(new Runnable() {
+            @Override
+            public void run() {
+                se.setFile(i);
+                se.play();
+            }
+        }).start();
     }
     public void changeArea() {
 

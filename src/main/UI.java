@@ -497,6 +497,7 @@ public class UI {
             npc.dialogueIndex = 0;
             if (gp.gameState == gp.dialogueState) {
                 gp.gameState = gp.playState;
+                gp.resetTimer = true;
             }
             if (gp.gameState == gp.cutsceneState) {
                 gp.csManager.scenePhase++;
@@ -623,7 +624,7 @@ public class UI {
             int dFrameX = frameX;
             int dFrameY = frameY + frameHeight;
             int dFrameWidth = frameWidth;
-            int dFrameHeight = gp.tileSize*3;
+            int dFrameHeight = (int)(gp.tileSize*3.5);
             
             // DRAW DESCRIPTION TEXT
             int textX = dFrameX + 20;
@@ -638,7 +639,19 @@ public class UI {
                     textY += 32;
                 }
 
-                g2.drawString("Durability: " + entity.inventory.get(itemIndex).durability, textX, textY + 100);
+                int durabilityY = dFrameY + dFrameHeight - 24;
+                
+                // Vẽ chữ Durability
+                g2.setColor(new Color(240, 190, 90)); // (Tuỳ chọn) Đổi màu vàng nhạt cho nổi bật
+                g2.setFont(g2.getFont().deriveFont(24F)); // (Tuỳ chọn) Font nhỏ hơn chút cho tinh tế
+                
+                // Vẽ căn phải (Align Right) cho chuyên nghiệp, hoặc giữ nguyên textX để căn trái
+                String durabilityText = "Durability: " + entity.inventory.get(itemIndex).durability;
+                int dRightX = getXforAlignToRightText(durabilityText, dFrameX + dFrameWidth - 24); // Vẽ căn phải
+                g2.drawString(durabilityText, dRightX, durabilityY);
+                
+                // Reset lại màu trắng cho các lần vẽ sau
+                g2.setColor(Color.white);
             }
 
         }
@@ -989,6 +1002,7 @@ public class UI {
         drawInventory(gp.player, false);
         // DRAW NPC'S INVENTORY
         drawInventory(npc, true);
+        g2.setFont(g2.getFont().deriveFont(32F));
 
         // DRAW HINT WINDOW
         int x = gp.tileSize * 2;
@@ -1018,7 +1032,7 @@ public class UI {
             g2.drawImage(coin,x+10,y+8,32,32,null);
             int price = npc.inventory.get(itemIndex).price;
             String text = "" + price;
-            x = getXforAlignToRightText(text, gp.tileSize*8);
+            x = getXforAlignToRightText(text, gp.tileSize*8 - 20);
             g2.drawString(text, x, y+34);
         }
 
@@ -1047,6 +1061,7 @@ public class UI {
     public void trade_sell() {
         // DRAW PLAYER'S INVENTORY
         drawInventory(gp.player, true);
+        g2.setFont(g2.getFont().deriveFont(32F));
 
         int x;
         int y;

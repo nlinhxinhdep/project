@@ -64,7 +64,7 @@ public class Player extends Entity {
         life = maxLife;
         exp = 0;
         nextLevelExp = 5;
-        coin = 300;
+        coin = 400;
 
         currentWeapon = null; // Ban đầu không có vũ khí
         currentShield = null;

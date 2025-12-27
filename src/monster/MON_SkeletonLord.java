@@ -150,6 +150,7 @@ public class MON_SkeletonLord extends Entity {
         //Restore the previous music
         gp.stopMusic();
         gp.playMusic(19);
+        gp.resetTimer = true;
 
         // Remove the iron doors
         for(int i = 0; i < gp.obj[1].length; i++)

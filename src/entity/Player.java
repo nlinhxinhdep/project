@@ -47,7 +47,6 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        // ... (giữ nguyên phần tọa độ) ...
         worldX = gp.tileSize * 12;
         worldY = gp.tileSize * 10;
         
@@ -67,7 +66,6 @@ public class Player extends Entity {
         nextLevelExp = 5;
         coin = 300;
 
-        // --- THAY ĐỔI Ở ĐÂY ---
         currentWeapon = null; // Ban đầu không có vũ khí
         currentShield = null;
         currentLight = null;
@@ -108,7 +106,6 @@ public class Player extends Entity {
     public void setItems() {
         inventory.clear();
         
-        // --- THAY ĐỔI Ở ĐÂY ---
         if (currentWeapon != null) {
             inventory.add(currentWeapon);
         }

@@ -41,33 +41,38 @@ public class Sound {
         soundURL[20] = getClass().getResource("/sound/chipwall.wav");
         soundURL[21] = getClass().getResource("/sound/dooropen.wav");
         soundURL[22] = getClass().getResource("/sound/FinalAction.mp3");
+        soundURL[23] = getClass().getResource("/sound/BIYTheme.mp3");
     }
 
     public void setFile(int i) {
         try {
-            // 1. Lấy input stream từ file gốc (MP3 hoặc WAV)
+            // Lấy input stream từ file gốc (MP3 hoặc WAV)
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             
-            // 2. Lấy định dạng (format) của file gốc
-            AudioFormat baseFormat = ais.getFormat();
+            // Lấy tên file để kiểm tra
+            String fileName = soundURL[i].toString();
 
-            // 3. Tạo định dạng mới để giải mã (Decode) về PCM (âm thanh thô mà Clip hiểu được)
-            AudioFormat decodeFormat = new AudioFormat(
-                AudioFormat.Encoding.PCM_SIGNED, // Định dạng chuẩn PCM
-                baseFormat.getSampleRate(),      // Giữ nguyên tần số lấy mẫu
-                16,                              // Chuyển về 16-bit (chuẩn)
-                baseFormat.getChannels(),        // Giữ nguyên số kênh (Mono/Stereo)
-                baseFormat.getChannels() * 2,    // Frame size = số kênh * 2 byte
-                baseFormat.getSampleRate(),      // Frame rate = Sample rate
-                false                            // Big Endian: false
-            );
-
-            // 4. Tạo luồng âm thanh mới đã được giải mã
-            AudioInputStream dais = AudioSystem.getAudioInputStream(decodeFormat, ais);
-
-            // 5. Mở Clip bằng luồng đã giải mã (dais) thay vì luồng gốc (ais)
-            clip = AudioSystem.getClip();
-            clip.open(dais);
+            // CHỈ GIẢI MÃ NẾU LÀ FILE MP3 (Nhạc nền)
+            if (fileName.endsWith(".mp3")) {
+                AudioFormat baseFormat = ais.getFormat();
+                AudioFormat decodeFormat = new AudioFormat(
+                    AudioFormat.Encoding.PCM_SIGNED,
+                    baseFormat.getSampleRate(),
+                    16,
+                    baseFormat.getChannels(),
+                    baseFormat.getChannels() * 2,
+                    baseFormat.getSampleRate(),
+                    false
+                );
+                AudioInputStream dais = AudioSystem.getAudioInputStream(decodeFormat, ais);
+                clip = AudioSystem.getClip();
+                clip.open(dais);
+            } 
+            // NẾU LÀ WAV (Sound Effect) -> LOAD NHANH NHƯ CŨ
+            else {
+                clip = AudioSystem.getClip();
+                clip.open(ais);
+            }
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
                 checkVolume();

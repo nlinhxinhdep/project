@@ -65,23 +65,48 @@ public class KeyHandler implements KeyListener {
             gp.playSE(9);
         }
         if(code == KeyEvent.VK_ENTER) {
+            
+            // --- NEW GAME ---
             if(gp.ui.commandNum == 0) {
+                gp.stopMusic();      // 1. Tắt nhạc Menu (Theme song 23)
                 gp.gameState = gp.playState;
-            	gp.playMusic(0);
+                gp.resetGame(true);
+                gp.playMusic(0);     // 2. Bật nhạc mở đầu game (ví dụ nhạc Rừng)
             }
+
+            // --- LOAD GAME ---
             if(gp.ui.commandNum == 1) {
-                File saveFile = new File("save.dat");
+                // Cần import java.io.File ở đầu file nếu chưa có
+                File saveFile = new File("save.dat"); 
                 
                 if (saveFile.exists()) {
-                    gp.saveLoad.load();
+                    gp.stopMusic();     // 1. Quan trọng: Tắt nhạc Menu trước
+                    gp.saveLoad.load(); // 2. Load dữ liệu (biến gp.currentMap sẽ được cập nhật tại đây)
                     gp.gameState = gp.playState;
-                    gp.playMusic(0);
+                    
+                    // 3. Logic chọn nhạc nền dựa trên Map vừa load
+                    // Thay vì luôn playMusic(0), ta kiểm tra xem nhân vật đang ở đâu
+                    if (gp.currentMap == 0) {
+                        gp.playMusic(0);  // Nếu ở Outside -> Nhạc Rừng
+                    } 
+                    else if (gp.currentMap == 1) {
+                        gp.playMusic(18); // Nếu ở Indoor -> Nhạc trong nhà
+                    }
+                    else if (gp.currentMap == 2) { // Ví dụ Dungeon (nếu map dungeon là 2)
+                        gp.playMusic(19); // Nhạc Dungeon
+                    }
+                    else {
+                        gp.playMusic(0);  // Mặc định cho các map khác
+                    }
+                    
                 } else {
-                    // Nếu không có file save thì không làm gì cả (hoặc phát âm thanh lỗi)
+                    // Nếu không có file save
                     System.out.println("Chưa có file save để load!");
-                    // gp.playSE(số_âm_thanh_lỗi); // Nếu bạn muốn thêm tiếng kêu
+                    gp.playSE(15); // Phát âm thanh báo lỗi (ví dụ: blocked.wav)
                 }
             }
+
+            // --- QUIT ---
             if(gp.ui.commandNum == 2) {
                 System.exit(0);
             }
@@ -264,6 +289,7 @@ public class KeyHandler implements KeyListener {
             else if (gp.ui.commandNum == 1) {
                 gp.gameState = gp.titleState;
                 gp.resetGame(true);
+                gp.playMusic(23);
             }
         }
     }

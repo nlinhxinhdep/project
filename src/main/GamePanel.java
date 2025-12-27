@@ -98,6 +98,9 @@ public class GamePanel extends JPanel implements Runnable {
     public final int indoor = 51;
     public final int dungeon = 52;
 
+    // MUSIC
+    int currentMusicId = -1;
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Đặt kích thước ưa thích cho GamePanel (rộng x cao)
@@ -113,10 +116,12 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
-//        playMusic(0);
+
         eManager.setup();
         gameState = titleState;
         currentArea = outside;
+
+        playMusic(23); // Bật nhạc Menu (BIYTheme.mp3) ngay khi vào game
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -356,15 +361,30 @@ public class GamePanel extends JPanel implements Runnable {
         g.dispose();
     }
     public void playMusic(int i) {
-    	// Tạo một luồng riêng biệt (Thread) để xử lý việc load nhạc
-        // Giúp game không bị đơ khi đang giải mã file MP3
+    	// 1. Cập nhật bài nhạc mà game "muốn" phát hiện tại
+        currentMusicId = i;
+        
+        // 2. Tắt ngay bài nhạc đang phát (nếu có)
+        music.stop(); 
+
+        // 3. Chạy luồng tải nhạc (để giảm lag)
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    music.setFile(i); // Việc nặng nhất nằm ở đây
-                    music.play();
-                    music.loop();
+                    // Tải file (nặng)
+                    music.setFile(i); 
+                    
+                    // --- ĐOẠN QUAN TRỌNG NHẤT ---
+                    // Khi tải xong, kiểm tra xem ID này còn khớp với mong muốn hiện tại không?
+                    // Nếu bạn bấm New Game nhanh quá, currentMusicId đã bị đổi thành bài khác (ví dụ 0)
+                    // nên bài nhạc Menu (23) sẽ không được phép chạy lệnh play().
+                    if (currentMusicId == i) {
+                        music.play();
+                        music.loop();
+                    }
+                    // -----------------------------
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

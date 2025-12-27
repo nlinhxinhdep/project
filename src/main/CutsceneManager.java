@@ -27,12 +27,21 @@ public class CutsceneManager {
     public CutsceneManager(GamePanel gp) {
         this.gp = gp;
 
-        endCredit = "Game Design: Your Name Here\n"
-                  + "Programming: Your Name Here\n"
-                  + "Graphics: Your Name Here\n"
-                  + "Music: Your Name Here\n"
-                  + "Sound Effects: Your Name Here\n"
-                  + "\nThank you for playing!";
+        // Cập nhật thông tin nhóm 6 người
+        endCredit = "DEVELOPED BY GROUP 6\n"
+                  + "--------------------------\n\n"
+                  + "--- Project Lead & Testing ---\n"
+                  + "Dang Trung Hieu\n\n"
+                  + "--- Graphics & Resources ---\n"
+                  + "Hoang Phuc Hung\n\n"
+                  + "--- Core Programming Team ---\n"
+                  + "Mai Huy Hoang\n"
+                  + "Do Trang Minh Quan\n"
+                  + "Nguyen Duc Thien\n"
+                  + "Le Tran Manh Tien\n"
+                  + "Hoang Phuc Hung\n"
+                  + "Dang Trung Hieu\n\n\n\n\n\n\n\n\n\n\n"
+                  + "Thank you for playing!";
     }
     public void draw(Graphics2D g2) {
         this.g2 = g2;
@@ -134,31 +143,26 @@ public class CutsceneManager {
     public void scene_ending() {
         
         if(scenePhase == 0){
-
             gp.stopMusic();
             gp.ui.npc = new OBJ_BlueHeart(gp);
             scenePhase++;
         }
         if(scenePhase == 1){
-
             // Display dialogues
             gp.ui.drawDialogueScreen();
         }
         if(scenePhase == 2){
-
             //Play the fanfare
             gp.playSE(4);
             scenePhase++;
         }
         if(scenePhase == 3){
-
             // Wait until the sound effect finishes
             if(counterReached(300) == true){
                 scenePhase++;
             }
         }
         if(scenePhase == 4){
-
             // The screen gets darker
             alpha += 0.005f;
             if(alpha > 1f){
@@ -172,7 +176,6 @@ public class CutsceneManager {
             }
         }
         if(scenePhase == 5){
-
             drawBlackBackground(1f);
             alpha += 0.005f;
             if(alpha > 1f){
@@ -190,27 +193,53 @@ public class CutsceneManager {
         if(scenePhase == 6){
             drawBlackBackground(1f);
             
+            // Hiện tên game
             drawString(1f, 120f, gp.screenHeight / 2, "Huster Adventure", 40);
-            if(counterReached(480) == true){
+            
+            // Đợi 5 giây (300 frames) rồi mới bắt đầu chạy Credit
+            if(counterReached(300) == true){
                 scenePhase++;
+                // Reset vị trí Y xuống dưới đáy màn hình để chuẩn bị chạy lên
+                y = gp.screenHeight + 100; 
             }
         }
         if(scenePhase == 7){
-
             drawBlackBackground(1f);
 
-            y = gp.screenHeight/2;
-            drawString(1f,38f,y , endCredit, 40);
-            if(counterReached(480) == true){
+            // Chạy chữ từ dưới lên
+            y--; 
+            drawString(1f, 38f, y, endCredit, 40);
+
+            // LOGIC DỪNG:
+            // Tính toán chiều cao của cả đoạn văn bản
+            int lineHeight = 40;
+            int textHeight = endCredit.split("\n").length * lineHeight;
+            
+            // Khi dòng cuối cùng ("Thank you...") chạy đến giữa màn hình thì dừng lại
+            // Công thức: y (đỉnh text) + textHeight (độ cao text) = vị trí đáy text
+            // Ta muốn đáy text nằm ở giữa màn hình (gp.screenHeight/2)
+            if(y + textHeight < gp.screenHeight / 2 + 130) { // +130 để nó nằm thấp xuống một chút cho đẹp
                 scenePhase++;
             }
         }
         if(scenePhase == 8){
-
             drawBlackBackground(1f);
+            
+            // Vẽ chữ đứng yên tại vị trí y hiện tại
+            drawString(1f, 38f, y, endCredit, 40);
 
-            y--;
-            drawString(1f,38f,y,endCredit, 40);
+            // Đợi 5 giây (300 frames) để người chơi đọc dòng Thank You
+            if(counterReached(480) == true){
+                scenePhase++;
+            }
+        }
+        if(scenePhase == 9){
+            // Reset game và trở về màn hình chính
+            gp.stopMusic();
+            gp.gameState = gp.titleState;
+            sceneNum = NA;
+            scenePhase = 0;
+            gp.playMusic(23);
         }
     }
     public boolean counterReached(int target){

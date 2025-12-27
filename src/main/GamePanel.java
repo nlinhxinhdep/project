@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     BufferedImage tempScreen;
     Graphics2D g2;
     public boolean fullScreenOn = false;
+    boolean resetTimer = false; //reset frame khi chuyển cảnh
     
 
     // FPS
@@ -167,6 +168,11 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;                              // Biến đếm để kiểm soát khi nào cần cập nhật khung hình
         while (gameThread != null) {                   // Vòng lặp chính của game (game loop), chạy liên tục khi gameThread tồn tại
             long currentTime = System.nanoTime();      // Lấy thời điểm hiện tại (nano giây)
+            if (resetTimer == true) {
+                lastTime = currentTime;                 // Đặt lại mốc thời gian bằng hiện tại
+                delta = 0;                              // Xóa hết "nợ" khung hình cũ
+                resetTimer = false;                     // Tắt cờ đi
+            }
             delta += (currentTime - lastTime) / drawInterval; 	// Tính xem đã trôi qua bao nhiêu phần của 1 khung hình
             lastTime = currentTime;                    			// Cập nhật lại mốc thời gian để tính lần sau
             if (delta >= 1) {                       // Khi đủ thời gian cho 1 khung hình (delta >= 1)
@@ -350,9 +356,20 @@ public class GamePanel extends JPanel implements Runnable {
         g.dispose();
     }
     public void playMusic(int i) {
-    	music.setFile(i);
-    	music.play();
-    	music.loop();
+    	// Tạo một luồng riêng biệt (Thread) để xử lý việc load nhạc
+        // Giúp game không bị đơ khi đang giải mã file MP3
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    music.setFile(i); // Việc nặng nhất nằm ở đây
+                    music.play();
+                    music.loop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
     public void stopMusic() {
     	music.stop();
@@ -382,6 +399,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         currentArea = nextArea;
         aSetter.setMonster();// making monsters respawn
+
+        resetTimer = true; // Báo hiệu cho GameLoop reset lại thời gian
     }
 
     public void removeTempEnity(){

@@ -13,6 +13,7 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Đóng cửa sổ sẽ thoát chương trình
         window.setResizable(false);                // Không cho phép thay đổi kích thước cửa sổ
         window.setTitle("Huster Adventure");                 // Đặt tiêu đề cho cửa sổ
+        
         new Main().setIcon();
         // window.setUndecorated(true);             // Fullscreen
 

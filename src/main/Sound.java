@@ -8,6 +8,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.AudioFormat;
 
 public class Sound {
     Clip clip;
@@ -17,7 +18,7 @@ public class Sound {
     float volume;
 
     public Sound() {
-    	soundURL[0] = getClass().getResource("/sound/BlueBoyAdventure.wav");
+    	soundURL[0] = getClass().getResource("/sound/StartingOff.mp3");
     	soundURL[1] = getClass().getResource("/sound/coin.wav");
     	soundURL[2] = getClass().getResource("/sound/powerup.wav");
     	soundURL[3] = getClass().getResource("/sound/unlock.wav");
@@ -35,18 +36,38 @@ public class Sound {
         soundURL[15] = getClass().getResource("/sound/blocked.wav");
         soundURL[16] = getClass().getResource("/sound/parry.wav");
         soundURL[17] = getClass().getResource("/sound/speak.wav");
-        soundURL[18] = getClass().getResource("/sound/Merchant.wav");
-        soundURL[19] = getClass().getResource("/sound/Dungeon.wav");
+        soundURL[18] = getClass().getResource("/sound/DeepForest.mp3");
+        soundURL[19] = getClass().getResource("/sound/Cavern.mp3");
         soundURL[20] = getClass().getResource("/sound/chipwall.wav");
         soundURL[21] = getClass().getResource("/sound/dooropen.wav");
-        soundURL[22] = getClass().getResource("/sound/FinalBattle.wav");
+        soundURL[22] = getClass().getResource("/sound/FinalAction.mp3");
     }
 
     public void setFile(int i) {
         try {
+            // 1. Lấy input stream từ file gốc (MP3 hoặc WAV)
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
+            
+            // 2. Lấy định dạng (format) của file gốc
+            AudioFormat baseFormat = ais.getFormat();
+
+            // 3. Tạo định dạng mới để giải mã (Decode) về PCM (âm thanh thô mà Clip hiểu được)
+            AudioFormat decodeFormat = new AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED, // Định dạng chuẩn PCM
+                baseFormat.getSampleRate(),      // Giữ nguyên tần số lấy mẫu
+                16,                              // Chuyển về 16-bit (chuẩn)
+                baseFormat.getChannels(),        // Giữ nguyên số kênh (Mono/Stereo)
+                baseFormat.getChannels() * 2,    // Frame size = số kênh * 2 byte
+                baseFormat.getSampleRate(),      // Frame rate = Sample rate
+                false                            // Big Endian: false
+            );
+
+            // 4. Tạo luồng âm thanh mới đã được giải mã
+            AudioInputStream dais = AudioSystem.getAudioInputStream(decodeFormat, ais);
+
+            // 5. Mở Clip bằng luồng đã giải mã (dais) thay vì luồng gốc (ais)
             clip = AudioSystem.getClip();
-            clip.open(ais);
+            clip.open(dais);
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
                 checkVolume();

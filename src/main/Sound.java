@@ -72,6 +72,15 @@ public class Sound {
             else {
                 clip = AudioSystem.getClip();
                 clip.open(ais);
+                // Thêm một "người giám sát". Khi tiếng động phát xong (STOP), tự động xóa nó khỏi RAM.
+                clip.addLineListener(new javax.sound.sampled.LineListener() {
+                    @Override
+                    public void update(javax.sound.sampled.LineEvent event) {
+                        if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
+                            event.getLine().close(); // Hát xong thì tự đóng -> Giải phóng RAM
+                        }
+                    }
+                });
             }
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);

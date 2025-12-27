@@ -1,6 +1,6 @@
 LỆNH ĐỂ CHẠY GAME
 javac -d bin -cp "lib/*" (Get-ChildItem -Path src -Recurse -Filter *.java).FullName
-java -cp "bin;lib/*" main.Main
+java -Xmx1024M -cp "bin;lib/*" main.Main
 
 Tóm Tắt Quy Trình Git Tối Ưu
 

@@ -112,7 +112,6 @@ public class Player extends Entity {
         if (currentShield != null) {
             inventory.add(currentShield);
         }
-        inventory.add(new OBJ_Key(gp));
     }
     public int getAttack() {
         if (currentWeapon == null) {

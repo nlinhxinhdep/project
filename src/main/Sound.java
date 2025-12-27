@@ -87,10 +87,12 @@ public class Sound {
     }
 
     public void play() {
+        if (clip == null) return; // Nếu lỗi nhạc thì im lặng, đừng crash game
         clip.start();
     }
 
     public void loop() {
+        if (clip == null) return;
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 

@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import entity.Entity;
 import main.GamePanel;
 
-public class InteractiveTile extends Entity{
+public abstract class InteractiveTile extends Entity{
 
     GamePanel gp;
     public boolean destructible = false;

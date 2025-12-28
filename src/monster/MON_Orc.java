@@ -14,7 +14,6 @@ public class MON_Orc extends Entity{
 
 	public MON_Orc(GamePanel gp) {
 		super(gp);
-		// TODO Auto-generated constructor stub
 		this.gp = gp;
 		type = type_monster;
 		name = "Orc";

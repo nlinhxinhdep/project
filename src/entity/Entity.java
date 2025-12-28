@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
 
-public class Entity {
+public abstract class Entity {
 	GamePanel gp;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
@@ -795,12 +795,13 @@ public class Entity {
                 int enBottomY = worldY + solidArea.y + solidArea.height;
                 
                 // Tọa độ trung tâm thực tế của Entity (quan trọng để di chuyển mượt)
-                int enMidX = enLeftX + (solidArea.width / 2);
-                int enMidY = enTopY + (solidArea.height / 2);
                 
-                // Tọa độ trung tâm của ô Next
-                int nextMidX = nextX + (gp.tileSize / 2);
-                int nextMidY = nextY + (gp.tileSize / 2);
+                // int enMidX = enLeftX + (solidArea.width / 2);
+                // int enMidY = enTopY + (solidArea.height / 2);
+                
+                // // Tọa độ trung tâm của ô Next
+                // int nextMidX = nextX + (gp.tileSize / 2);
+                // int nextMidY = nextY + (gp.tileSize / 2);
 
                 // --- LOGIC DI CHUYỂN ĐƠN GIẢN HÓA ---
                 

@@ -42,4 +42,7 @@ public class DataStorage implements Serializable {
     int mapObjectWorldY[][];
     String mapObjectLootNames[][];
     boolean mapObjectOpened[][];
+
+    //SKELETON LORD
+    int skeletonLordDefeated;
 }

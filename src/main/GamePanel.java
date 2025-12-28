@@ -361,6 +361,7 @@ public class GamePanel extends JPanel implements Runnable {
         g.dispose();
     }
     public void playMusic(int i) {
+        if (currentMusicId == i) return;
     	// 1. Cập nhật bài nhạc mà game "muốn" phát hiện tại
         currentMusicId = i;
         
@@ -395,13 +396,7 @@ public class GamePanel extends JPanel implements Runnable {
     	music.stop();
     }
     public void playSE(int i) {
-    	new Thread(new Runnable() {
-            @Override
-            public void run() {
-                se.setFile(i);
-                se.play();
-            }
-        }).start();
+    	se.playSE(i);
     }
     public void changeArea() {
 

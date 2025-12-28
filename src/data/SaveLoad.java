@@ -102,6 +102,9 @@ public class SaveLoad {
                 }
             }
 
+            // SAVE PROGRESS
+            ds.skeletonLordDefeated = Progress.skeletonLordDefeated;
+
             // Write the DataStorage object
             oos.writeObject(ds);
         }
@@ -157,6 +160,9 @@ public class SaveLoad {
             gp.currentMap = ds.currentMap;
             gp.player.worldX = ds.playerWorldX;
             gp.player.worldY = ds.playerWorldY;
+
+            // LOAD PROGRESS
+            Progress.skeletonLordDefeated = ds.skeletonLordDefeated;
 
             // LOAD MONSTERS
             for(int mapNum = 0; mapNum < gp.maxMap; mapNum++) {

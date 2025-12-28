@@ -60,7 +60,7 @@ public class Player extends Entity {
         level = 1;
         strength = 5; 
         dexterity = 10;
-        maxLife = 6;
+        maxLife = 60;
         life = maxLife;
         exp = 0;
         nextLevelExp = 5;

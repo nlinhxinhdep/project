@@ -60,7 +60,10 @@ public class EventHandler{
 
         if (canTouchEvent == true) {
             if (hit(0,27,16,"right") == true) {damagePit(gp.dialogueState);}
-            else if (hit(0,17,18,"up") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,23,20,"up") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,24,20,"up") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,25,20,"up") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,26,20,"up") == true) {healingPool(gp.dialogueState);}
             else if (hit(0,30,9,"any") == true) {teleport(1,12,13,gp.indoor);} // to the merchant's house
             else if (hit(1,12,13,"any") == true) {teleport(0,30,9,gp.outside);} // to outside
             else if (hit(1,12,9,"up") == true) {speak(gp.npc[1][0]);}

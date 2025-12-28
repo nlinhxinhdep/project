@@ -789,6 +789,10 @@ public class UI {
         g2.drawString("Back", textX, textY);
         if(commandNum == 5) {
             g2.drawString(">", textX-25, textY);
+            if(gp.keyH.enterPressed == true) {
+                gp.gameState = gp.playState; // Quay về màn hình chơi game
+                commandNum = 0;             // Reset con trỏ về vị trí đầu tiên cho lần mở sau
+            }
         }
 
         // FULL SCREEN CHECK BOX

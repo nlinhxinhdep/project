@@ -639,16 +639,16 @@ public class UI {
                     textY += 32;
                 }
 
-                int durabilityY = dFrameY + dFrameHeight - 24;
+                // int durabilityY = dFrameY + dFrameHeight - 24;
                 
-                // Vẽ chữ Durability
-                g2.setColor(new Color(240, 190, 90)); // (Tuỳ chọn) Đổi màu vàng nhạt cho nổi bật
-                g2.setFont(g2.getFont().deriveFont(24F)); // (Tuỳ chọn) Font nhỏ hơn chút cho tinh tế
+                // // Vẽ chữ Durability
+                // g2.setColor(new Color(240, 190, 90)); // (Tuỳ chọn) Đổi màu vàng nhạt cho nổi bật
+                // g2.setFont(g2.getFont().deriveFont(24F)); // (Tuỳ chọn) Font nhỏ hơn chút cho tinh tế
                 
-                // Vẽ căn phải (Align Right) cho chuyên nghiệp, hoặc giữ nguyên textX để căn trái
-                String durabilityText = "Durability: " + entity.inventory.get(itemIndex).durability;
-                int dRightX = getXforAlignToRightText(durabilityText, dFrameX + dFrameWidth - 24); // Vẽ căn phải
-                g2.drawString(durabilityText, dRightX, durabilityY);
+                // // Vẽ căn phải (Align Right) cho chuyên nghiệp, hoặc giữ nguyên textX để căn trái
+                // String durabilityText = "Durability: " + entity.inventory.get(itemIndex).durability;
+                // int dRightX = getXforAlignToRightText(durabilityText, dFrameX + dFrameWidth - 24); // Vẽ căn phải
+                // g2.drawString(durabilityText, dRightX, durabilityY);
                 
                 // Reset lại màu trắng cho các lần vẽ sau
                 g2.setColor(Color.white);

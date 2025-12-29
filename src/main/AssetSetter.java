@@ -201,16 +201,10 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldY = gp.tileSize*36;
         i++;
 
-        gp.monster[mapNum][i] = new MON_Bat(gp);
-        gp.monster[mapNum][i].worldX = gp.tileSize*21;
-        gp.monster[mapNum][i].worldY = gp.tileSize*37;
-        i++;
-
         mapNum = 3;
         i = 0;
 
-        if(Progress.skeletonLordDefeated == 0)
-        {
+        if(Progress.skeletonLordDefeated == 0){
             gp.monster[mapNum][i] = new MON_SkeletonLord(gp);
             gp.monster[mapNum][i].worldX = gp.tileSize*23;
             gp.monster[mapNum][i].worldY = gp.tileSize*16;

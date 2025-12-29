@@ -2,28 +2,7 @@ LỆNH ĐỂ CHẠY GAME
 javac -d bin -cp "lib/*" (Get-ChildItem -Path src -Recurse -Filter *.java).FullName
 java -Xmx1024M -cp "bin;lib/*;res" main.Main
 
-Tóm Tắt Quy Trình Git Tối Ưu
 
-làm việc
-
-0. git pull origin main // cập nhật code của người trước
-
-1. Code: Làm việc, tạo ra các thay đổi mới.
-
-2. git add .
-: Chuẩn bị các thay đổi (đưa vào khu vực Staging).
-
-3. git commit -m "Message" 
-Ví dụ: git commit -m "vid 46-50"
-: Lưu an toàn các thay đổi vào lịch sử cục bộ.
-
-4. git pull origin main
-: Đồng bộ hóa. Cập nhật code mới nhất từ xa và giải quyết xung đột (nếu có).
-
-5. git push origin main
-: Đẩy code đã hoàn thành lên kho lưu trữ từ xa (GitHub).
-
-// thêm class ở mục java Projects
 
 
 

@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     // World settings
     public int maxWorldCol;
     public int maxWorldRow;
-    public final int maxMap = 20;
+    public final int maxMap = 5;
     public int currentMap = 0;
     // Full screen
     int screenWidth2 = screenWidth;

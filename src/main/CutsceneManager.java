@@ -28,7 +28,7 @@ public class CutsceneManager {
         this.gp = gp;
 
         // Cập nhật thông tin nhóm 6 người
-        endCredit = "DEVELOPED BY GROUP 6\n"
+        endCredit = "DEVELOPED BY GROUP 21\n"
                   + "--------------------------\n\n"
                   + "--- Project Lead & Testing ---\n"
                   + "Hoang Phuc Hung\n\n"
@@ -63,6 +63,7 @@ public class CutsceneManager {
                     gp.obj[gp.currentMap][i].worldX = gp.tileSize * 25;
                     gp.obj[gp.currentMap][i].worldY = gp.tileSize * 28;
                     gp.obj[gp.currentMap][i].temp = true;
+                    gp.playSE(21);
                     break;
                 }
             }
@@ -218,7 +219,7 @@ public class CutsceneManager {
             // Khi dòng cuối cùng ("Thank you...") chạy đến giữa màn hình thì dừng lại
             // Công thức: y (đỉnh text) + textHeight (độ cao text) = vị trí đáy text
             // Ta muốn đáy text nằm ở giữa màn hình (gp.screenHeight/2)
-            if(y + textHeight < gp.screenHeight / 2 + 130) { // +130 để nó nằm thấp xuống một chút cho đẹp
+            if(y + textHeight < gp.screenHeight / 2 + 110) { // +110 để nó nằm thấp xuống một chút cho đẹp
                 scenePhase++;
             }
         }
@@ -228,7 +229,7 @@ public class CutsceneManager {
             // Vẽ chữ đứng yên tại vị trí y hiện tại
             drawString(1f, 38f, y, endCredit, 40);
 
-            // Đợi 5 giây (300 frames) để người chơi đọc dòng Thank You
+            // Đợi 8 giây (480 frames) để người chơi đọc dòng Thank You
             if(counterReached(480) == true){
                 scenePhase++;
             }

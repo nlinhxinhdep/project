@@ -133,6 +133,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void resetGame (boolean restart) {
         stopMusic();
+        currentMusicId = -1; 
+        // Để ép playMusic chạy lại từ đầu khi Retry
         currentArea = outside;
         removeTempEnity();
         bossBattleOn = false;

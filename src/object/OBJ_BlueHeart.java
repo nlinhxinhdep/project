@@ -18,8 +18,8 @@ public class OBJ_BlueHeart extends Entity {
         setDialogues();
     }
     public void setDialogues() {
-        dialogues[0][0] = "You obtained a \nBlue Heart!";
-        dialogues[0][1] = "Your life has \nincreased by 1 point!";
+        dialogues[0][0] = "You obtained a Legendary Blue Heart!";
+        dialogues[0][1] = "You have completed your quest!";
     }
     public boolean use(Entity entity) {
         gp.gameState = gp.cutsceneState;

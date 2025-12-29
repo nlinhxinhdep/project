@@ -88,7 +88,6 @@ public class NPC_BigRock extends Entity{
                 case "right": worldX += speed; break;
             }
         }
-
         detectPlate();
     }
     public void detectPlate()

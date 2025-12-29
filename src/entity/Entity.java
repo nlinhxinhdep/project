@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
 
-public abstract class Entity {
+public class Entity {
 	GamePanel gp;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,

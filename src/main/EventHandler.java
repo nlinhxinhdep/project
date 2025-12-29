@@ -2,7 +2,7 @@ package main;
 
 import data.Progress;
 import entity.Entity;
-public class EventHandler extends Entity{
+public class EventHandler{
 
     GamePanel gp;
     EventRect[][][] eventRect;
@@ -12,10 +12,10 @@ public class EventHandler extends Entity{
     Entity eventMaster;
 
     public EventHandler(GamePanel gp) {
-        super(gp);
+
         this.gp = gp;
 
-        // eventMaster = new Entity(gp);
+        eventMaster = new Entity(gp);
 
         eventRect = new EventRect[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
 
@@ -43,10 +43,9 @@ public class EventHandler extends Entity{
         setDialogue();
     }
     public void setDialogue(){
-        dialogues[0][0] = "You fell into a pit!";
-        dialogues[1][0] = "You drink the water:\nYour life and mana have been recovered.\n"
+        eventMaster.dialogues[0][0] = "You fell into a pit!";
+        eventMaster.dialogues[1][0] = "You drink the water:\nYour life and mana have been recovered.\n"
                                           + "The progress has been saved!";
-
     }
 
     public void checkEvent() {

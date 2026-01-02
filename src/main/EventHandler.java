@@ -64,9 +64,9 @@ public class EventHandler extends Entity{
             else if (hit(0,12,32,"any") == true) {healingPool(gp.dialogueState);}
             else if (hit(0,13,33,"any") == true) {healingPool(gp.dialogueState);}
             else if (hit(0,42,31,"any") == true) {healingPool(gp.dialogueState);}
-            else if (hit(0,27,36,"any") == true) {teleport(1,12,13,gp.indoor);} // to the merchant's house
-            else if (hit(1,12,13,"any") == true) {teleport(0,27,36,gp.outside);} // to outside
-            else if (hit(1,12,9,"up") == true) {speak(gp.npc[1][0]);}
+            else if (hit(0,27,36,"any") == true) {teleport(1,23,24,gp.indoor);} // to the merchant's house
+            else if (hit(1,23,24,"any") == true) {teleport(0,27,36,gp.outside);} // to outside
+            else if (hit(1,23,20,"up") == true) {speak(gp.npc[1][0]);}
 
             else if (hit(0,39,39,"any") == true) {teleport(2,6,44,gp.dungeon);} // to the dungeon
             else if (hit(2,6,44,"any") == true) {teleport(0,39,39,gp.outside);} // to outside

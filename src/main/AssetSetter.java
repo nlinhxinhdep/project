@@ -23,19 +23,6 @@ public class AssetSetter {
     public void setObject() {
         int mapNum = 0;
         int i = 0;
-
-        // gp.obj[mapNum][i] = new OBJ_Coin_Bronze(gp);
-        // gp.obj[mapNum][i].worldX = gp.tileSize*25;
-        // gp.obj[mapNum][i].worldY = gp.tileSize*23;  
-        // i++;
-        // gp.obj[mapNum][i] = new OBJ_Axe(gp);
-        // gp.obj[mapNum][i].worldX = gp.tileSize*33;
-        // gp.obj[mapNum][i].worldY = gp.tileSize*7;  
-        // i++; 
-        // gp.obj[mapNum][i] = new OBJ_Lantern(gp);
-        // gp.obj[mapNum][i].worldX = gp.tileSize*18;
-        // gp.obj[mapNum][i].worldY = gp.tileSize*20;  
-        // i++;
         gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*15;
         gp.obj[mapNum][i].worldY = gp.tileSize*38;  
@@ -59,6 +46,29 @@ public class AssetSetter {
         // gp.obj[mapNum][i].worldX = gp.tileSize*16;
         // gp.obj[mapNum][i].worldY = gp.tileSize*20;  
         // i++;
+
+        mapNum = 1;
+        i = 0;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Lantern(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*16;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;  
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Axe(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*16;
+        gp.obj[mapNum][i].worldY = gp.tileSize*21;  
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*30;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;  
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Tent(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*30;
+        gp.obj[mapNum][i].worldY = gp.tileSize*21;  
+        i++;
 
         mapNum = 2;
         i = 0;
@@ -120,8 +130,8 @@ public class AssetSetter {
         mapNum = 1;
         i = 0;
         gp.npc[mapNum][i] = new NPC_Merchant(gp);
-    	gp.npc[mapNum][i].worldX = gp.tileSize*12;
-    	gp.npc[mapNum][i].worldY = gp.tileSize*7;
+    	gp.npc[mapNum][i].worldX = gp.tileSize*23;
+    	gp.npc[mapNum][i].worldY = gp.tileSize*18;
         i++;
 
         mapNum = 2;

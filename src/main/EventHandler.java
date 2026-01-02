@@ -59,19 +59,19 @@ public class EventHandler extends Entity{
         }
 
         if (canTouchEvent == true) {
-            if (hit(0,27,16,"right") == true) {damagePit(gp.dialogueState);}
-            else if (hit(0,23,20,"up") == true) {healingPool(gp.dialogueState);}
-            else if (hit(0,24,20,"up") == true) {healingPool(gp.dialogueState);}
-            else if (hit(0,25,20,"up") == true) {healingPool(gp.dialogueState);}
-            else if (hit(0,26,20,"up") == true) {healingPool(gp.dialogueState);}
-            else if (hit(0,30,9,"any") == true) {teleport(1,12,13,gp.indoor);} // to the merchant's house
-            else if (hit(1,12,13,"any") == true) {teleport(0,30,9,gp.outside);} // to outside
+            if (hit(0,10,26,"any") == true) {damagePit(gp.dialogueState);}
+            else if (hit(0,12,31,"any") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,12,32,"any") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,13,33,"any") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,42,31,"any") == true) {healingPool(gp.dialogueState);}
+            else if (hit(0,27,36,"any") == true) {teleport(1,12,13,gp.indoor);} // to the merchant's house
+            else if (hit(1,12,13,"any") == true) {teleport(0,27,36,gp.outside);} // to outside
             else if (hit(1,12,9,"up") == true) {speak(gp.npc[1][0]);}
 
-            else if (hit(0,24,9,"any") == true) {teleport(2,6,44,gp.dungeon);} // to the dungeon
-            else if (hit(2,6,44,"any") == true) {teleport(0,24,9,gp.outside);} // to outside
+            else if (hit(0,39,39,"any") == true) {teleport(2,6,44,gp.dungeon);} // to the dungeon
+            else if (hit(2,6,44,"any") == true) {teleport(0,39,39,gp.outside);} // to outside
             else if (hit(2,17,29,"any") == true) {teleport(3,26,41,gp.dungeon);} // to B2
-            else if (hit(0,10,6,"any") == true) {teleport(3,26,41,gp.dungeon);} //debug
+            else if (hit(0,35,10,"any") == true) {teleport(3,26,41,gp.dungeon);} //debug
             else if (hit(3,26,41,"any") == true) {teleport(2,17,29,gp.dungeon);} // to B1
             else if (hit(3,25,27,"any") == true) {SkeletonLord();}
         }

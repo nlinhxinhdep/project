@@ -1,12 +1,8 @@
 package entity;
 
 import main.KeyHandler;
-import object.OBJ_Fireball;
-import object.OBJ_Key;
-import object.OBJ_Rock;
-import object.OBJ_Shield_Wood;
-import object.OBJ_Sword_Normal;
-import object.OBJ_Axe;
+import object.*;
+
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -37,8 +33,8 @@ public class Player extends Entity {
         solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 26;
-        solidArea.height = 26;
+        solidArea.width = 32;
+        solidArea.height = 32;
         
         // attackArea.width = 36;
         // attackArea.height= 36;
@@ -47,7 +43,7 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 12;
+        worldX = gp.tileSize * 30;
         worldY = gp.tileSize * 10;
         
         defaultSpeed = 4;
@@ -83,8 +79,8 @@ public class Player extends Entity {
 
     public void setDefaultPositions() {
         gp.currentMap = 0;
-        worldX = gp.tileSize * 12;
-        worldY = gp.tileSize * 10;
+        worldX = gp.tileSize * 10;
+        worldY = gp.tileSize * 30;
         direction = "down";
     }
 

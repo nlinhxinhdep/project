@@ -79,8 +79,8 @@ public class Player extends Entity {
 
     public void setDefaultPositions() {
         gp.currentMap = 0;
-        worldX = gp.tileSize * 10;
-        worldY = gp.tileSize * 30;
+        worldX = gp.tileSize * 30;
+        worldY = gp.tileSize * 10;
         direction = "down";
     }
 

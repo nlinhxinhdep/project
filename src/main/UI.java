@@ -8,14 +8,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Heart;
-import object.OBJ_Key;
-import object.OBJ_ManaCrystal;
+import object.*;
 import entity.Entity;
 
 public class UI {

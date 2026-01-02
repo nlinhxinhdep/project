@@ -60,8 +60,6 @@ public class TileManager {
 		}catch(IOException e){
 			System.out.println("Exception");
 		}
-		
-		
 		loadMap("/maps/TheGioi1.txt",0); 
 		loadMap("/maps/indoor01.txt",1);
 		loadMap("/maps/dungeon_new01.txt",2);
@@ -69,7 +67,6 @@ public class TileManager {
 
 	}
 	public void getTileImage() {
-
 		for(int i = 0; i < fileNames.size(); i++)
 		{
 			String fileName;
@@ -82,9 +79,7 @@ public class TileManager {
 			}else{
 				collision = false;
 			}
-
 			setup(i, fileName, collision);
-
 		}
 
 	    
@@ -113,7 +108,7 @@ public class TileManager {
 			}
 			br.close();
 		}catch(Exception e) {
-			
+			System.out.println("lol");
 		}
 	}
 	

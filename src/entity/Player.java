@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import main.GamePanel;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity {
 	
@@ -336,7 +335,7 @@ public class Player extends Entity {
             contactMonster(monsterIndex);
 
             // CHECK INTERACTIVE TILE COLLISION
-            int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+            // int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
             
             //CHECK EVENT teleport, trap, healing pool
             gp.eHandler.checkEvent();

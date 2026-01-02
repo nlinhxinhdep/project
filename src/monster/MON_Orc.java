@@ -87,7 +87,7 @@ public class MON_Orc extends Entity{
 
 		// Check if it attacks
         if (attacking == false) {
-            checkAttackOrNot(30, gp.tileSize*4, gp.tileSize);
+            checkAttackOrNot(30, gp.tileSize*2, gp.tileSize*2);
         }
 	}
 	public void damageReaction(){
@@ -99,10 +99,10 @@ public class MON_Orc extends Entity{
 		int i = new Random().nextInt(100)+1;
 
 		if(i < 50) {
-			dropItem(new OBJ_Coin_Bronze(gp));
+			dropItem(new OBJ_Heart(gp));
 		}
 		if(i >= 50 && i < 75) {
-			dropItem(new OBJ_Heart(gp));
+			dropItem(new OBJ_Coin_Bronze(gp));
 		}
 		if(i >= 75 && i < 100) {
 			dropItem(new OBJ_ManaCrystal(gp));

@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;

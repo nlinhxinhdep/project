@@ -267,7 +267,7 @@ public class GamePanel extends JPanel implements Runnable {
             tileM.draw(g2); // Vẽ bản đồ (tile map)
 
             // Interactive tile
-            for(int i = 0; i < iTile[1].length; i++) {
+            for(int i = 0; i < iTile[currentMap].length; i++) {
                 if(iTile[currentMap][i] != null) {
                     iTile[currentMap][i].draw(g2);
                 }
@@ -275,22 +275,22 @@ public class GamePanel extends JPanel implements Runnable {
 
             // add entity to the list
             entityList.add(player);
-            for(int i = 0; i < npc[1].length; i++) {
+            for(int i = 0; i < npc[currentMap].length; i++) {
                 if(npc[currentMap][i] != null) {
                     entityList.add(npc[currentMap][i]);
                 }
             }
-            for(int i = 0; i < obj[1].length; i++) {
+            for(int i = 0; i < obj[currentMap].length; i++) {
                 if(obj[currentMap][i] != null) {
                     entityList.add(obj[currentMap][i]);
                 }
             }
-            for(int i = 0; i < monster[1].length; i++) {
+            for(int i = 0; i < monster[currentMap].length; i++) {
                 if(monster[currentMap][i] != null) {
                     entityList.add(monster[currentMap][i]);
                 }
             }
-            for(int i = 0; i < projectile[1].length; i++) {
+            for(int i = 0; i < projectile[currentMap].length; i++) {
                 if(projectile[currentMap][i] != null) {
                     entityList.add(projectile[currentMap][i]);
                 }

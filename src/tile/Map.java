@@ -16,7 +16,6 @@ public class Map extends TileManager {
         super(gp);
         this.gp = gp;
         createWorldMap();
-
     }
 
     public void createWorldMap() {

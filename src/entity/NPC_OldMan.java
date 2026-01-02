@@ -11,10 +11,10 @@ public class NPC_OldMan extends Entity{
         getImage();
         setDialogue();
         solidArea = new Rectangle();
-        solidArea.x = 8;      // Cách lề trái 8px
-        solidArea.y = 16;     // Cách lề trên 16px (thường chừa đầu cho thoáng)
-        solidArea.width = 32; // Chiều rộng nhỏ hơn tile (48 - 8 - 8 = 32)
-        solidArea.height = 32;// Chiều cao nhỏ hơn tile
+        solidArea.x = 4;      // Cách lề trái 8px
+        solidArea.y = 8;     // Cách lề trên 16px (thường chừa đầu cho thoáng)
+        solidArea.width = 40; // Chiều rộng nhỏ hơn tile (48 - 8 - 8 = 32)
+        solidArea.height = 40;// Chiều cao nhỏ hơn tile
 
         dialogueSet = -1;
         

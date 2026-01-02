@@ -1,14 +1,12 @@
 package entity;
 
 import main.GamePanel;
-import object.OBJ_Door;
 import object.OBJ_Door_Iron;
 import tile_interactive.IT_MetalPlate;
 import tile_interactive.InteractiveTile;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class NPC_BigRock extends Entity{
 

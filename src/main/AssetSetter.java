@@ -220,6 +220,13 @@ public class AssetSetter {
         gp.iTile[mapNum][i] = new IT_DryTree(gp, 39, 32);
         i++;
         gp.iTile[mapNum][i] = new IT_DryTree(gp, 36, 35);
+        i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp, 36, 36);
+        i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp, 40, 36);
+        i++;
+        gp.iTile[mapNum][i] = new IT_DryTree(gp, 40, 37);
+        
         mapNum = 2;
         i = 0;
 

@@ -188,7 +188,7 @@ public class UI {
         while (i < gp.player.maxMana) {
             g2.drawImage(crystal_blank, x, y, null);
             i++;
-            x += 35;
+            x += 40;
         }
 
         // DRAW MANA
@@ -198,7 +198,7 @@ public class UI {
         while (i < gp.player.mana) {
             g2.drawImage(crystal_full, x, y, null);
             i++;
-            x += 35;
+            x += 40;
         }
 
     }

@@ -30,10 +30,6 @@ public class CutsceneManager {
         // Cập nhật thông tin nhóm 6 người
         endCredit = "DEVELOPED BY GROUP 21\n"
                   + "--------------------------\n\n"
-                  + "--- Project Lead & Testing ---\n"
-                  + "Hoang Phuc Hung\n\n"
-                  + "--- Graphics & Resources ---\n"
-                  + "Dang Trung Hieu\n\n"
                   + "--- Core Programming Team ---\n"
                   + "Mai Huy Hoang\n"
                   + "Do Trang Minh Quan\n"

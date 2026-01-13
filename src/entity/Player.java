@@ -15,7 +15,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public int standCounter = 0;
-    public int hasKey = 0;
+    private int hasKey = 0;
     public boolean attackCanceled = false;
     public final int maxInventorySize = 20;
     public boolean lightUpdated = false;
@@ -722,5 +722,13 @@ public class Player extends Entity {
             g2.drawImage(image, tempScreenX, tempScreenY, drawWidth, drawHeight, null);
         }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+
+    public void addKey() {
+        hasKey++; // Tăng số lượng khóa
+    }
+
+    public int getKeyCount() {
+        return hasKey; // Chỉ cho phép xem, không cho sửa trực tiếp
     }
 }
